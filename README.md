@@ -21,4 +21,4 @@ The interface should be self explaining, but there are also description dialogs,
 
 Xposed is also used to hide the module itself from the Ingress client app. As far as we know, Ingress isn't searching for Xglyph particularly, but it's better to be prepared.
 
-<img src="https://i.imgur.com/tMtCKSC.png">
+<img src="Screenshot.png" width="350"/>
