@@ -27,7 +27,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class MainActivity extends Activity {
-	private static final String TAG = "Xglyph²";
+	private static final String TAG = "Xglyph2";
 
 	public static final String INGRESSPACKAGENAME = "com.nianticproject.ingress";
 	public static final int INGRESSVERSION20160802 = 11051;
