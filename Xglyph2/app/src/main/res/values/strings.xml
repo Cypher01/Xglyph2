@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<string name="app_name">Xglyph²</string>
+	<string name="xposed_description">Perfect Ingress Glyph Hacking: Catch incoming Glyphs and replace outgoing with them</string>
+	<string name="bitcoin_fingerprint">1ND1wp8CRoVD6ivTvCsD6RY8KfoDocak4d</string>
+
+	<string name="warning_ingress_version_header">Ingress is not installed</string>
+	<string name="warning_ingress_version">This Xposed module is to be used for Niantic\'s augmented reality game Ingress. It won\'t help you without the game.</string>
+	<string name="warning_bitcoin_header">No Bitcoin wallet installed</string>
+	<string name="warning_bitcoin">It seems that you don\'t have a Bitcoin wallet installed.\nIf you want to get started with Bitcoin, I recommend Mycelium.</string>
+
+	<string name="description_module_header">Activate</string>
+	<string name="description_module">Activate the module independent of the Xposed Installer. You don\'t have to restart the device, but you have to restart Ingress to take effect.</string>
+
+	<string name="description_glyph_game_header">Correct glyphs</string>
+	<string name="description_glyph_game">Catch incoming glyphs and replace outgoing with them. You have to draw all glyphs, but mistakes don\'t matter.</string>
+
+	<string name="description_normal_hack_key_header">Normal Hack Key</string>
+	<string name="description_normal_hack_key">Hack a key, even when using the Hack No Key option in the circle menu. Of course you can only get a key if you don\'t already have one.</string>
+	<string name="description_normal_hack_nokey_header">Normal Hack No Key</string>
+	<string name="description_normal_hack_nokey">Hack no key, even when using the Hack option in the circle menu or the Hack button in the portal dialog.</string>
+
+	<string name="description_command_channel_key_header">Glyph Hack Key</string>
+	<string name="description_command_channel_key">Automatically send a \'MORE\' glyph to request a key, even when you don\'t touch the command glyph or draw bullshit.</string>
+	<string name="description_command_channel_nokey_header">Glyph Hack No Key</string>
+	<string name="description_command_channel_nokey">Automatically send a \'LESS\' glyph to request no key, even when you don\'t touch the command glyph or draw bullshit.</string>
+	<string name="description_command_channel_fast_header">Glyph Hack Speed Fast</string>
+	<string name="description_command_channel_slow_header">Glyph Hack Speed Slow</string>
+	<string name="description_command_channel_fast">Automatically send a \'COMPLEX\' glyph to speed up the glyph sequence prompt. You have to touch the command glyph interface to trigger this!</string>
+	<string name="description_command_channel_slow">Automatically send a \'SIMPLE\' glyph to slow down the glyph sequence prompt. You have to touch the command glyph interface to trigger this!</string>
+	<string name="description_command_channel_override_header">Overriding</string>
+	<string name="description_command_channel_override">If you draw a correct \'MORE\' or \'LESS\' command glyph, it overrides the Glyph Hack Key configuration. And if you draw a correct \'COMPLEX\' or \'SIMPLE\' command glyph, it overrides the Glyph Hack Speed configuration. Key and speed overriding are also combinable.</string>
+
+	<string name="description_misc_sound_header">Sound</string>
+	<string name="description_misc_sound">Turn on/off Xglyph sounds.</string>
+	<string name="description_misc_debug_log_header">Debug Log</string>
+	<string name="description_misc_debug_log">Show/hide debug log in Xposed. You can check the log either in the Xposed Installer or using adb.</string>
+
+	<string name="description_credits_header">Credits</string>
+	<string name="description_credits">Well, the credits…</string>
+
+	<string name="description_donation_header">Bitcoin</string>
+	<string name="description_donation">It took pretty long to create Xglyph², the functionality, as well as the interface.\n\nDonations are very welcome! :-)\n\nYou can use Bitcoin to make a donation. If you don\'t have a Bitcoin wallet yet, I recommend Mycelium. You can find it on the Play Store.</string>
+
+	<string name="module_label">Module</string>
+	<string name="module_description">Activate module independent of Xposed Installer</string>
+	<string name="activate_label">Activate</string>
+	<string name="correct_glyphs_label">Correct glyphs</string>
+	<string name="glyph_game_label">Glyph game</string>
+	<string name="glyph_game_description">Catch incoming glyphs and replace outgoing with them</string>
+	<string name="command_channel_label">Command channel</string>
+	<string name="command_channel_description">Command glyph config</string>
+	<string name="glyph_key_label">MORE/LESS</string>
+	<string name="glyph_speed_label">COMPLEX/SIMPLE</string>
+	<string name="normal_hack_label">Normal hack</string>
+	<string name="normal_hack_description">Always hack (no) key</string>
+	<string name="misc_label">Misc</string>
+	<string name="misc_description">Miscellaneous configs</string>
+	<string name="sound_label">Sound</string>
+	<string name="debug_log_label">Debug Log (Xposed)</string>
+	<string name="credits_label">Credits</string>
+	<string name="credits_version">v%1$s, %2$s</string>
+	<string name="credits_developer">Developed by Cypher</string>
+	<string name="credits_thanks">Based on Xglyph by xfunforx</string>
+	<string name="donation_label">Donation</string>
+	<string name="donation_description">If you like my work, feel free to donate</string>
+
+	<string name="activate_off">Not active</string>
+	<string name="activate_on">Active</string>
+	<string name="correct_glyphs_off">Off</string>
+	<string name="correct_glyphs_on">On</string>
+	<string name="glyph_key_off">Off</string>
+	<string name="glyph_key_key">Key</string>
+	<string name="glyph_key_no_key">No Key</string>
+	<string name="glyph_speed_off">Off</string>
+	<string name="glyph_speed_fast">Fast</string>
+	<string name="glyph_speed_slow">Slow</string>
+	<string name="normal_hack_off">Off</string>
+	<string name="normal_hack_key">Key</string>
+	<string name="normal_hack_no_key">No Key</string>
+	<string name="sound_off">Off</string>
+	<string name="sound_on">On</string>
+	<string name="debug_log_off">Off</string>
+	<string name="debug_log_on">On</string>
+	<string name="bitcoin">Bitcoin</string>
+	<string name="donate">Donate</string>
+	<string name="close">Close</string>
+</resources>

@@ -1,0 +1,718 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".MainActivity">
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="@dimen/activity_margin_half"
+			android:paddingBottom="@dimen/activity_margin_half">
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="@dimen/activity_margin_half"
+				android:paddingBottom="@dimen/activity_margin_half"
+				android:paddingRight="@dimen/activity_margin"
+				android:paddingLeft="@dimen/rectangle_margin_half"
+				android:background="@drawable/rectangle_yellow_border">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/text_size_header"
+					android:text="@string/app_name"
+					android:id="@+id/tv_header"
+					android:layout_gravity="center"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="-1dp"
+				android:paddingTop="@dimen/activity_margin_half"
+				android:paddingBottom="@dimen/activity_margin_half"
+				android:paddingRight="@dimen/activity_margin"
+				android:paddingLeft="@dimen/rectangle_margin_3quater"
+				android:background="@drawable/rectangle_yellow_border">
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginBottom="@dimen/gap_margin"
+					android:gravity="center_vertical">
+
+					<LinearLayout
+						android:orientation="vertical"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:background="@drawable/rectangle_orange"
+						android:layout_gravity="top"
+						android:id="@+id/description_module">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/module_label"/>
+
+					</LinearLayout>
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginLeft="@dimen/gap_margin"
+						android:text="@string/module_description"
+						android:textIsSelectable="false"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical|right">
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/activate_label"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<Button
+							android:layout_width="match_parent"
+							android:layout_height="@dimen/button_height"
+							android:textAppearance="?android:attr/textAppearance"
+							android:layout_marginLeft="@dimen/gap_margin"
+							android:padding="0dp"
+							android:background="@drawable/rectangle_cyan"
+							android:textSize="@dimen/text_size_button"
+							android:text="@string/activate_off"
+							android:id="@+id/button_activate"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="-1dp"
+				android:paddingTop="@dimen/activity_margin_half"
+				android:paddingBottom="@dimen/activity_margin_half"
+				android:paddingRight="@dimen/activity_margin"
+				android:paddingLeft="@dimen/rectangle_margin_3quater"
+				android:background="@drawable/rectangle_yellow_border">
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginBottom="@dimen/gap_margin"
+					android:gravity="center_vertical">
+
+					<LinearLayout
+						android:orientation="vertical"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:background="@drawable/rectangle_orange"
+						android:layout_gravity="top"
+						android:id="@+id/description_glyphGame">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/glyph_game_label"/>
+
+					</LinearLayout>
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginLeft="@dimen/gap_margin"
+						android:text="@string/glyph_game_description"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical|right">
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/correct_glyphs_label"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<Button
+							android:layout_width="match_parent"
+							android:layout_height="@dimen/button_height"
+							android:textAppearance="?android:attr/textAppearance"
+							android:layout_marginLeft="@dimen/gap_margin"
+							android:padding="0dp"
+							android:background="@drawable/rectangle_cyan"
+							android:textSize="@dimen/text_size_button"
+							android:text="@string/correct_glyphs_off"
+							android:id="@+id/button_correctGlyphs"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="-1dp"
+				android:paddingTop="@dimen/activity_margin_half"
+				android:paddingBottom="@dimen/activity_margin_half"
+				android:paddingRight="@dimen/activity_margin"
+				android:paddingLeft="@dimen/rectangle_margin_3quater"
+				android:background="@drawable/rectangle_yellow_border">
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginBottom="@dimen/gap_margin"
+					android:gravity="center_vertical">
+
+					<LinearLayout
+						android:orientation="vertical"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:background="@drawable/rectangle_orange"
+						android:layout_gravity="top"
+						android:id="@+id/description_commandChannel">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/command_channel_label"/>
+
+					</LinearLayout>
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginLeft="@dimen/gap_margin"
+						android:text="@string/command_channel_description"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical|right">
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/glyph_key_label"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<Button
+							android:layout_width="match_parent"
+							android:layout_height="@dimen/button_height"
+							android:textAppearance="?android:attr/textAppearance"
+							android:layout_marginLeft="@dimen/gap_margin"
+							android:padding="0dp"
+							android:background="@drawable/rectangle_cyan"
+							android:textSize="@dimen/text_size_button"
+							android:text="@string/glyph_key_off"
+							android:id="@+id/button_glyphKey"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical|right">
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/glyph_speed_label"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<Button
+							android:layout_width="match_parent"
+							android:layout_height="@dimen/button_height"
+							android:textAppearance="?android:attr/textAppearance"
+							android:layout_marginLeft="@dimen/gap_margin"
+							android:padding="0dp"
+							android:background="@drawable/rectangle_cyan"
+							android:textSize="@dimen/text_size_button"
+							android:text="@string/glyph_speed_off"
+							android:id="@+id/button_glyphSpeed"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="-1dp"
+				android:paddingTop="@dimen/activity_margin_half"
+				android:paddingBottom="@dimen/activity_margin_half"
+				android:paddingRight="@dimen/activity_margin"
+				android:paddingLeft="@dimen/rectangle_margin_3quater"
+				android:background="@drawable/rectangle_yellow_border">
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginBottom="@dimen/gap_margin"
+					android:gravity="center_vertical">
+
+					<LinearLayout
+						android:orientation="vertical"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:background="@drawable/rectangle_orange"
+						android:layout_gravity="top"
+						android:id="@+id/description_normalHack">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/normal_hack_label"/>
+
+					</LinearLayout>
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginLeft="@dimen/gap_margin"
+						android:text="@string/normal_hack_description"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical|right">
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/normal_hack_label"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<Button
+							android:layout_width="match_parent"
+							android:layout_height="@dimen/button_height"
+							android:textAppearance="?android:attr/textAppearance"
+							android:layout_marginLeft="@dimen/gap_margin"
+							android:padding="0dp"
+							android:background="@drawable/rectangle_cyan"
+							android:textSize="@dimen/text_size_button"
+							android:text="@string/normal_hack_off"
+							android:id="@+id/button_normalHack"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="-1dp"
+				android:paddingTop="@dimen/activity_margin_half"
+				android:paddingBottom="@dimen/activity_margin_half"
+				android:paddingRight="@dimen/activity_margin"
+				android:paddingLeft="@dimen/rectangle_margin_3quater"
+				android:background="@drawable/rectangle_yellow_border">
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginBottom="@dimen/gap_margin"
+					android:gravity="center_vertical">
+
+					<LinearLayout
+						android:orientation="vertical"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:background="@drawable/rectangle_orange"
+						android:layout_gravity="top"
+						android:id="@+id/description_misc">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/misc_label"/>
+
+					</LinearLayout>
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginLeft="@dimen/gap_margin"
+						android:text="@string/misc_description"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical|right">
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/sound_label"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<Button
+							android:layout_width="match_parent"
+							android:layout_height="@dimen/button_height"
+							android:textAppearance="?android:attr/textAppearance"
+							android:layout_marginLeft="@dimen/gap_margin"
+							android:padding="0dp"
+							android:background="@drawable/rectangle_cyan"
+							android:textSize="@dimen/text_size_button"
+							android:text="@string/sound_on"
+							android:id="@+id/button_sound"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical|right">
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/debug_log_label"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<Button
+							android:layout_width="match_parent"
+							android:layout_height="@dimen/button_height"
+							android:textAppearance="?android:attr/textAppearance"
+							android:layout_marginLeft="@dimen/gap_margin"
+							android:padding="0dp"
+							android:background="@drawable/rectangle_cyan"
+							android:textSize="@dimen/text_size_button"
+							android:text="@string/debug_log_off"
+							android:id="@+id/button_debugLog"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="-1dp"
+				android:paddingTop="@dimen/activity_margin_half"
+				android:paddingBottom="@dimen/activity_margin_half"
+				android:paddingRight="@dimen/activity_margin"
+				android:paddingLeft="@dimen/rectangle_margin_3quater"
+				android:background="@drawable/rectangle_yellow_border">
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:gravity="center_vertical">
+
+					<LinearLayout
+						android:orientation="vertical"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:background="@drawable/rectangle_orange"
+						android:layout_gravity="top"
+						android:id="@+id/description_credits">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/credits_label"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						android:orientation="vertical"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_weight="0"
+						android:layout_marginLeft="@dimen/gap_margin">
+
+						<ImageView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:src="@mipmap/ic_launcher"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						android:orientation="vertical"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:layout_marginLeft="@dimen/gap_margin">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/credits_version"
+							android:id="@+id/tv_credits"/>
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="@dimen/text_margin"
+							android:text="@string/credits_developer"/>
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="@dimen/text_margin"
+							android:text="@string/credits_thanks"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="-1dp"
+				android:paddingTop="@dimen/activity_margin_half"
+				android:paddingBottom="@dimen/activity_margin_half"
+				android:paddingRight="@dimen/activity_margin"
+				android:paddingLeft="@dimen/rectangle_margin_3quater"
+				android:background="@drawable/rectangle_yellow_border">
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginBottom="@dimen/gap_margin"
+					android:gravity="center_vertical">
+
+					<LinearLayout
+						android:orientation="vertical"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:background="@drawable/rectangle_orange"
+						android:layout_gravity="top"
+						android:id="@+id/description_donation">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/donation_label"/>
+
+					</LinearLayout>
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginLeft="@dimen/gap_margin"
+						android:text="@string/donation_description"
+						android:id="@+id/tv_donate"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical|right">
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/bitcoin"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:gravity="center_vertical|right">
+
+						<Button
+							android:layout_width="match_parent"
+							android:layout_height="@dimen/button_height"
+							android:textAppearance="?android:attr/textAppearance"
+							android:layout_marginLeft="@dimen/gap_margin"
+							android:padding="0dp"
+							android:background="@drawable/rectangle_cyan"
+							android:textSize="@dimen/text_size_button"
+							android:text="@string/donate"
+							android:id="@+id/button_donate"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</ScrollView>
+
+</LinearLayout>

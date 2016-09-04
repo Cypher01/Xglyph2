@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<color name="rectangle_yellow">#FFD752</color>         <!-- correct -->
+	<color name="rectangle_yellow_fill">#082D3A</color>    <!-- one of 2 colors (dotted) -->
+	<color name="rectangle_cyan">#00F3FF</color>           <!-- correct -->
+	<color name="rectangle_cyan_fill">#19454A</color>      <!-- one of 3 colors (dotted) -->
+	<color name="rectangle_orange">#FF813A</color>         <!-- correct -->
+	<color name="rectangle_orange_fill">#C0000400</color>  <!-- approximated -->
+</resources>

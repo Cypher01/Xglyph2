@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginTop="-1dp"
+	android:paddingTop="@dimen/activity_margin_half"
+	android:paddingBottom="@dimen/activity_margin_half"
+	android:paddingRight="@dimen/activity_margin"
+	android:paddingLeft="@dimen/rectangle_margin_3quater"
+	android:id="@+id/ll_entry">
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginBottom="@dimen/gap_margin"
+		android:gravity="center_vertical">
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/rectangle_orange"
+			android:layout_gravity="top">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="[Placeholder]"
+				android:id="@+id/tv_title"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/gap_margin"
+			android:text="[Placeholder]"
+			android:textIsSelectable="false"
+			android:id="@+id/tv_description"/>
+
+	</LinearLayout>
+
+</LinearLayout>
