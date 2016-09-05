@@ -1,6 +1,6 @@
 # Xglyph²
 
-Xglyph² is an <a href="http://repo.xposed.info/">Xposed</a> module, that's adding some features to the glyph game in Niantic's augmented reality game <a href="https://play.google.com/store/apps/details?id=com.nianticproject.ingress">Ingress</a>.
+Xglyph² is an <a href="http://repo.xposed.info/">Xposed</a> module, that's adding some mods to the glyph game in Niantic's augmented reality game <a href="https://play.google.com/store/apps/details?id=com.nianticproject.ingress">Ingress</a>.
 
 It let's you
 * correct glyphs by replacing outgoing glyphs with incoming ones
