@@ -6,6 +6,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:minWidth="4000dp"
+	android:layout_margin="@dimen/activity_margin"
 	android:background="@drawable/rectangle_yellow_border">
 
 	<LinearLayout
@@ -42,30 +43,15 @@
 		android:paddingBottom="@dimen/dialog_margin"
 		android:paddingRight="@dimen/activity_margin">
 
+		<!-- this is just a placeholder used for the button width -->
 		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1">
-
-			<!-- this is just a placeholder used for the button width -->
-
-		</LinearLayout>
+			style="@style/SectionBodySplitStyle"/>
 
 		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1">
+			style="@style/SectionBodySplitStyle">
 
 			<Button
-				android:layout_width="match_parent"
-				android:layout_height="@dimen/button_height"
-				android:layout_gravity="right"
-				android:textAppearance="?android:attr/textAppearance"
-				android:padding="0dp"
-				android:background="@drawable/rectangle_cyan"
-				android:textSize="@dimen/text_size_button"
+				style="@style/ButtonStyle"
 				android:text="@string/close"
 				android:id="@+id/button_close"/>
 

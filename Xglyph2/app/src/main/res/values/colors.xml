@@ -8,4 +8,5 @@
 	<color name="rectangle_orange">#FF813A</color>         <!-- correct -->
 	<color name="rectangle_orange_fill">#C0000400</color>  <!-- approximated -->
 	<color name="half_transparent">#C0000000</color>
+	<color name="transparent">#00000000</color>
 </resources>

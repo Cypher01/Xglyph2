@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -452,7 +453,10 @@ public class MainActivity extends Activity {
 	private void showDialog(String... texts) {
 		final Dialog description = new Dialog(MainActivity.this);
 
+		description.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		description.getWindow().setBackgroundDrawableResource(R.color.transparent);
 		description.setContentView(R.layout.dialog);
+
 		LinearLayout ll_description = (LinearLayout) description.findViewById(R.id.ll_description);
 
 		Button button_close = (Button) description.findViewById(R.id.button_close);

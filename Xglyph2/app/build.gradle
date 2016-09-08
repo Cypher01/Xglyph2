@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
 	compileSdkVersion 24
-	buildToolsVersion "24.0.1"
+	buildToolsVersion "24.0.2"
 
 	defaultConfig {
 		applicationId "com.cypher.xglyph2"
@@ -20,7 +20,6 @@ android {
 }
 
 dependencies {
-	compile 'com.android.support:appcompat-v7:24.2.0' // TODO: this is needed only for the theme, maybe get rid of this
 	compile 'com.github.amlcurran.showcaseview:library:5.4.3'
 	provided 'de.robv.android.xposed:api:82'
 }

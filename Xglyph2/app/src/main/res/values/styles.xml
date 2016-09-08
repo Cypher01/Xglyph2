@@ -1,13 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-	<style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
-		<item name="colorPrimary">@android:color/black</item>
-		<item name="colorPrimaryDark">@android:color/black</item>
-		<item name="colorAccent">@android:color/black</item>
+	<style name="AppTheme" parent="android:Theme.Black.NoTitleBar">
 		<item name="android:colorBackground">@android:color/black</item>
 		<item name="android:textColor">@android:color/white</item>
 		<item name="android:textSize">@dimen/text_size</item>
+	</style>
+
+	<style name="SectionStyle">
+		<item name="android:orientation">vertical</item>
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_marginTop">-1dp</item>
+		<item name="android:paddingTop">@dimen/activity_margin_half</item>
+		<item name="android:paddingBottom">@dimen/activity_margin_half</item>
+		<item name="android:paddingRight">@dimen/activity_margin</item>
+		<item name="android:paddingLeft">@dimen/rectangle_margin_3quater</item>
+		<item name="android:background">@drawable/rectangle_yellow_border</item>
+	</style>
+
+	<style name="SectionHeaderStyle">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:layout_marginBottom">@dimen/gap_margin</item>
+		<item name="android:gravity">center_vertical</item>
+	</style>
+
+	<style name="SectionTitleStyle">
+		<item name="android:orientation">vertical</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:background">@drawable/rectangle_orange</item>
+		<item name="android:layout_gravity">top</item>
+	</style>
+
+	<style name="SectionBodyStyle">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:gravity">center_vertical|right</item>
+	</style>
+
+	<style name="SectionBodySplitStyle" parent="@style/SectionBodyStyle">
+		<item name="android:layout_weight">1</item>
+	</style>
+
+	<style name="ButtonStyle" parent="android:Widget.Button">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">@dimen/button_height</item>
+		<item name="android:layout_marginLeft">@dimen/gap_margin</item>
+		<item name="android:padding">0dp</item>
+		<item name="android:background">@drawable/rectangle_cyan</item>
+		<item name="android:textColor">@android:color/white</item>
+		<item name="android:textSize">@dimen/text_size_button</item>
 	</style>
 
 	<style name="ShowcaseViewStyle" parent="ShowcaseView">

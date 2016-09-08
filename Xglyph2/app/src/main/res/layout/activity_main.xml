@@ -19,14 +19,9 @@
 			android:paddingBottom="@dimen/activity_margin_half">
 
 			<LinearLayout
-				android:orientation="vertical"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/activity_margin_half"
-				android:paddingBottom="@dimen/activity_margin_half"
-				android:paddingRight="@dimen/activity_margin"
+				style="@style/SectionStyle"
 				android:paddingLeft="@dimen/rectangle_margin_half"
-				android:background="@drawable/rectangle_yellow_border">
+				android:layout_marginTop="0dp">
 
 				<TextView
 					android:layout_width="wrap_content"
@@ -39,29 +34,13 @@
 			</LinearLayout>
 
 			<LinearLayout
-				android:orientation="vertical"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="-1dp"
-				android:paddingTop="@dimen/activity_margin_half"
-				android:paddingBottom="@dimen/activity_margin_half"
-				android:paddingRight="@dimen/activity_margin"
-				android:paddingLeft="@dimen/rectangle_margin_3quater"
-				android:background="@drawable/rectangle_yellow_border">
+				style="@style/SectionStyle">
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:layout_marginBottom="@dimen/gap_margin"
-					android:gravity="center_vertical">
+					style="@style/SectionHeaderStyle">
 
 					<LinearLayout
-						android:orientation="vertical"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:background="@drawable/rectangle_orange"
-						android:layout_gravity="top"
+						style="@style/SectionTitleStyle"
 						android:id="@+id/description_module">
 
 						<TextView
@@ -81,17 +60,10 @@
 				</LinearLayout>
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:gravity="center_vertical|right">
+					style="@style/SectionBodyStyle">
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<TextView
 							android:layout_width="wrap_content"
@@ -101,20 +73,10 @@
 					</LinearLayout>
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<Button
-							android:layout_width="match_parent"
-							android:layout_height="@dimen/button_height"
-							android:textAppearance="?android:attr/textAppearance"
-							android:layout_marginLeft="@dimen/gap_margin"
-							android:padding="0dp"
-							android:background="@drawable/rectangle_cyan"
-							android:textSize="@dimen/text_size_button"
+							style="@style/ButtonStyle"
 							android:text="@string/activate_off"
 							android:id="@+id/button_activate"/>
 
@@ -125,29 +87,13 @@
 			</LinearLayout>
 
 			<LinearLayout
-				android:orientation="vertical"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="-1dp"
-				android:paddingTop="@dimen/activity_margin_half"
-				android:paddingBottom="@dimen/activity_margin_half"
-				android:paddingRight="@dimen/activity_margin"
-				android:paddingLeft="@dimen/rectangle_margin_3quater"
-				android:background="@drawable/rectangle_yellow_border">
+				style="@style/SectionStyle">
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:layout_marginBottom="@dimen/gap_margin"
-					android:gravity="center_vertical">
+					style="@style/SectionHeaderStyle">
 
 					<LinearLayout
-						android:orientation="vertical"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:background="@drawable/rectangle_orange"
-						android:layout_gravity="top"
+						style="@style/SectionTitleStyle"
 						android:id="@+id/description_glyphGame">
 
 						<TextView
@@ -166,17 +112,10 @@
 				</LinearLayout>
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:gravity="center_vertical|right">
+					style="@style/SectionBodyStyle">
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<TextView
 							android:layout_width="wrap_content"
@@ -186,20 +125,10 @@
 					</LinearLayout>
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<Button
-							android:layout_width="match_parent"
-							android:layout_height="@dimen/button_height"
-							android:textAppearance="?android:attr/textAppearance"
-							android:layout_marginLeft="@dimen/gap_margin"
-							android:padding="0dp"
-							android:background="@drawable/rectangle_cyan"
-							android:textSize="@dimen/text_size_button"
+							style="@style/ButtonStyle"
 							android:text="@string/correct_glyphs_off"
 							android:id="@+id/button_correctGlyphs"/>
 
@@ -210,29 +139,13 @@
 			</LinearLayout>
 
 			<LinearLayout
-				android:orientation="vertical"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="-1dp"
-				android:paddingTop="@dimen/activity_margin_half"
-				android:paddingBottom="@dimen/activity_margin_half"
-				android:paddingRight="@dimen/activity_margin"
-				android:paddingLeft="@dimen/rectangle_margin_3quater"
-				android:background="@drawable/rectangle_yellow_border">
+				style="@style/SectionStyle">
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:layout_marginBottom="@dimen/gap_margin"
-					android:gravity="center_vertical">
+					style="@style/SectionHeaderStyle">
 
 					<LinearLayout
-						android:orientation="vertical"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:background="@drawable/rectangle_orange"
-						android:layout_gravity="top"
+						style="@style/SectionTitleStyle"
 						android:id="@+id/description_commandChannel">
 
 						<TextView
@@ -251,17 +164,10 @@
 				</LinearLayout>
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:gravity="center_vertical|right">
+					style="@style/SectionBodyStyle">
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<TextView
 							android:layout_width="wrap_content"
@@ -271,20 +177,10 @@
 					</LinearLayout>
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<Button
-							android:layout_width="match_parent"
-							android:layout_height="@dimen/button_height"
-							android:textAppearance="?android:attr/textAppearance"
-							android:layout_marginLeft="@dimen/gap_margin"
-							android:padding="0dp"
-							android:background="@drawable/rectangle_cyan"
-							android:textSize="@dimen/text_size_button"
+							style="@style/ButtonStyle"
 							android:text="@string/glyph_key_off"
 							android:id="@+id/button_glyphKey"/>
 
@@ -293,17 +189,10 @@
 				</LinearLayout>
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:gravity="center_vertical|right">
+					style="@style/SectionBodyStyle">
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<TextView
 							android:layout_width="wrap_content"
@@ -313,20 +202,10 @@
 					</LinearLayout>
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<Button
-							android:layout_width="match_parent"
-							android:layout_height="@dimen/button_height"
-							android:textAppearance="?android:attr/textAppearance"
-							android:layout_marginLeft="@dimen/gap_margin"
-							android:padding="0dp"
-							android:background="@drawable/rectangle_cyan"
-							android:textSize="@dimen/text_size_button"
+							style="@style/ButtonStyle"
 							android:text="@string/glyph_speed_off"
 							android:id="@+id/button_glyphSpeed"/>
 
@@ -337,29 +216,13 @@
 			</LinearLayout>
 
 			<LinearLayout
-				android:orientation="vertical"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="-1dp"
-				android:paddingTop="@dimen/activity_margin_half"
-				android:paddingBottom="@dimen/activity_margin_half"
-				android:paddingRight="@dimen/activity_margin"
-				android:paddingLeft="@dimen/rectangle_margin_3quater"
-				android:background="@drawable/rectangle_yellow_border">
+				style="@style/SectionStyle">
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:layout_marginBottom="@dimen/gap_margin"
-					android:gravity="center_vertical">
+					style="@style/SectionHeaderStyle">
 
 					<LinearLayout
-						android:orientation="vertical"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:background="@drawable/rectangle_orange"
-						android:layout_gravity="top"
+						style="@style/SectionTitleStyle"
 						android:id="@+id/description_normalHack">
 
 						<TextView
@@ -378,17 +241,10 @@
 				</LinearLayout>
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:gravity="center_vertical|right">
+					style="@style/SectionBodyStyle">
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<TextView
 							android:layout_width="wrap_content"
@@ -398,20 +254,10 @@
 					</LinearLayout>
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<Button
-							android:layout_width="match_parent"
-							android:layout_height="@dimen/button_height"
-							android:textAppearance="?android:attr/textAppearance"
-							android:layout_marginLeft="@dimen/gap_margin"
-							android:padding="0dp"
-							android:background="@drawable/rectangle_cyan"
-							android:textSize="@dimen/text_size_button"
+							style="@style/ButtonStyle"
 							android:text="@string/normal_hack_off"
 							android:id="@+id/button_normalHack"/>
 
@@ -422,29 +268,13 @@
 			</LinearLayout>
 
 			<LinearLayout
-				android:orientation="vertical"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="-1dp"
-				android:paddingTop="@dimen/activity_margin_half"
-				android:paddingBottom="@dimen/activity_margin_half"
-				android:paddingRight="@dimen/activity_margin"
-				android:paddingLeft="@dimen/rectangle_margin_3quater"
-				android:background="@drawable/rectangle_yellow_border">
+				style="@style/SectionStyle">
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:layout_marginBottom="@dimen/gap_margin"
-					android:gravity="center_vertical">
+					style="@style/SectionHeaderStyle">
 
 					<LinearLayout
-						android:orientation="vertical"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:background="@drawable/rectangle_orange"
-						android:layout_gravity="top"
+						style="@style/SectionTitleStyle"
 						android:id="@+id/description_misc">
 
 						<TextView
@@ -463,17 +293,10 @@
 				</LinearLayout>
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:gravity="center_vertical|right">
+					style="@style/SectionBodyStyle">
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<TextView
 							android:layout_width="wrap_content"
@@ -483,20 +306,10 @@
 					</LinearLayout>
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<Button
-							android:layout_width="match_parent"
-							android:layout_height="@dimen/button_height"
-							android:textAppearance="?android:attr/textAppearance"
-							android:layout_marginLeft="@dimen/gap_margin"
-							android:padding="0dp"
-							android:background="@drawable/rectangle_cyan"
-							android:textSize="@dimen/text_size_button"
+							style="@style/ButtonStyle"
 							android:text="@string/sound_on"
 							android:id="@+id/button_sound"/>
 
@@ -505,17 +318,10 @@
 				</LinearLayout>
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:gravity="center_vertical|right">
+					style="@style/SectionBodyStyle">
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<TextView
 							android:layout_width="wrap_content"
@@ -525,20 +331,10 @@
 					</LinearLayout>
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<Button
-							android:layout_width="match_parent"
-							android:layout_height="@dimen/button_height"
-							android:textAppearance="?android:attr/textAppearance"
-							android:layout_marginLeft="@dimen/gap_margin"
-							android:padding="0dp"
-							android:background="@drawable/rectangle_cyan"
-							android:textSize="@dimen/text_size_button"
+							style="@style/ButtonStyle"
 							android:text="@string/debug_log_off"
 							android:id="@+id/button_debugLog"/>
 
@@ -549,28 +345,14 @@
 			</LinearLayout>
 
 			<LinearLayout
-				android:orientation="vertical"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="-1dp"
-				android:paddingTop="@dimen/activity_margin_half"
-				android:paddingBottom="@dimen/activity_margin_half"
-				android:paddingRight="@dimen/activity_margin"
-				android:paddingLeft="@dimen/rectangle_margin_3quater"
-				android:background="@drawable/rectangle_yellow_border">
+				style="@style/SectionStyle">
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:gravity="center_vertical">
+					style="@style/SectionHeaderStyle"
+					android:layout_marginBottom="0dp">
 
 					<LinearLayout
-						android:orientation="vertical"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:background="@drawable/rectangle_orange"
-						android:layout_gravity="top"
+						style="@style/SectionTitleStyle"
 						android:id="@+id/description_credits">
 
 						<TextView
@@ -626,29 +408,13 @@
 			</LinearLayout>
 
 			<LinearLayout
-				android:orientation="vertical"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="-1dp"
-				android:paddingTop="@dimen/activity_margin_half"
-				android:paddingBottom="@dimen/activity_margin_half"
-				android:paddingRight="@dimen/activity_margin"
-				android:paddingLeft="@dimen/rectangle_margin_3quater"
-				android:background="@drawable/rectangle_yellow_border">
+				style="@style/SectionStyle">
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:layout_marginBottom="@dimen/gap_margin"
-					android:gravity="center_vertical">
+					style="@style/SectionHeaderStyle">
 
 					<LinearLayout
-						android:orientation="vertical"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:background="@drawable/rectangle_orange"
-						android:layout_gravity="top"
+						style="@style/SectionTitleStyle"
 						android:id="@+id/description_donation">
 
 						<TextView
@@ -668,17 +434,10 @@
 				</LinearLayout>
 
 				<LinearLayout
-					android:orientation="horizontal"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:gravity="center_vertical|right">
+					style="@style/SectionBodyStyle">
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<TextView
 							android:layout_width="wrap_content"
@@ -688,20 +447,10 @@
 					</LinearLayout>
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:gravity="center_vertical|right">
+						style="@style/SectionBodySplitStyle">
 
 						<Button
-							android:layout_width="match_parent"
-							android:layout_height="@dimen/button_height"
-							android:textAppearance="?android:attr/textAppearance"
-							android:layout_marginLeft="@dimen/gap_margin"
-							android:padding="0dp"
-							android:background="@drawable/rectangle_cyan"
-							android:textSize="@dimen/text_size_button"
+							style="@style/ButtonStyle"
 							android:text="@string/donate"
 							android:id="@+id/button_donate"/>
 
