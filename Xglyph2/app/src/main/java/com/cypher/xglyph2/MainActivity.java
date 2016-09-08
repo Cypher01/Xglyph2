@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -186,6 +188,8 @@ public class MainActivity extends Activity {
 					res.getString(R.string.warning_ingress_version)
 			);
 		}
+
+		descriptionHint();
 	}
 
 	@Override
@@ -519,5 +523,20 @@ public class MainActivity extends Activity {
 		}
 
 		throw new IngressNotInstalledException();
+	}
+
+	private void descriptionHint() {
+		Button button = new Button(this);
+		button.setBackgroundColor(0); // transparent
+
+		new ShowcaseView.Builder(this)
+				.withNewStyleShowcase()
+				.setStyle(R.style.ShowcaseViewStyle)
+				.setTarget(new ViewTarget(R.id.description_glyphGame, this))
+				.setContentText(R.string.description_showView)
+				.replaceEndButton(button)
+				.hideOnTouchOutside()
+				.singleShot(4242) // don't care about an ID, because this is the only ShowcaseView
+				.build();
 	}
 }

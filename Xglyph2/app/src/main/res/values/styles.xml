@@ -9,4 +9,13 @@
 		<item name="android:textColor">@android:color/white</item>
 		<item name="android:textSize">@dimen/text_size</item>
 	</style>
+
+	<style name="ShowcaseViewStyle" parent="ShowcaseView">
+		<item name="sv_backgroundColor">@color/half_transparent</item>
+		<item name="sv_detailTextAppearance">@style/ShowcaseViewTextStyle</item>
+	</style>
+
+	<style name="ShowcaseViewTextStyle" parent="TextAppearance.ShowcaseView.Detail">
+		<item name="android:textSize">@dimen/text_size_description_hint</item>
+	</style>
 </resources>
