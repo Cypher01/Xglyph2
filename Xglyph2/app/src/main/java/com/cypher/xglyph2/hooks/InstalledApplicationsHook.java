@@ -7,12 +7,12 @@ import de.robv.android.xposed.XC_MethodHook;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.cypher.xglyph2.Xglyph.debugLog;
+import static com.cypher.xglyph2.Xglyph.*;
 
 public class InstalledApplicationsHook extends XC_MethodHook {
 	@Override
 	protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-		debugLog("ApplicationPackageManager.getInstalledApplications called");
+		debugLog(apmClassName + "." + apmClassMethodName1 + " called");
 
 		List installedApplications = (List) param.getResult();
 

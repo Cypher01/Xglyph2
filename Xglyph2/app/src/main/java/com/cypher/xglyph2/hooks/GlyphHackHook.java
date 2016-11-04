@@ -23,9 +23,10 @@ public class GlyphHackHook extends XC_MethodHook {
 
 	@Override
 	protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable {
-		debugLog(portalHackingParamsClassName.substring(portalHackingParamsClassName.lastIndexOf(".")) + ": constructor with (String, UserInputGlyphSequence, UserInputGlyphSequence) called");
+		debugLog(portalHackingParamsClassName.substring(portalHackingParamsClassName.lastIndexOf(".") + 1) + ": constructor for glyph hack called");
 
 		pref.reload();
+
 		int correctGlyphs = pref.getInt(CORRECTGLYPHS, ON_OFF.OFF.ordinal());
 		int glyphKey = pref.getInt(GLYPHKEY, KEY.OFF.ordinal());
 		int glyphSpeed = pref.getInt(GLYPHSPEED, SPEED.OFF.ordinal());

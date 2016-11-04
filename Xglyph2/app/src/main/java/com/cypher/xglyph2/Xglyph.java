@@ -32,6 +32,10 @@ public class Xglyph implements IXposedHookLoadPackage {
 	public static String speedClassName = "o.nb"; // FIXME: this class name is for Ingress v1.108.1 and maybe future versions
 	public static String speedClassMethodName = "ˊ"; // FIXME: this method name is for Ingress v1.99.1 - v1.108.1 and maybe future versions
 
+	public static final String apmClassName = "android.app.ApplicationPackageManager";
+	public static final String apmClassMethodName1 = "getInstalledApplications";
+	public static final String apmClassMethodName2 = "getInstalledPackages";
+
 	public static boolean glyphSpeedTriggered = false;
 
 	public static void debugLog(String message) {
@@ -68,88 +72,68 @@ public class Xglyph implements IXposedHookLoadPackage {
 			final Class<?> speedClass;
 
 			try {
-				debugLog(portalHackingParamsClassName + ": finding class");
 				portalHackingParamsClass = findClass(portalHackingParamsClassName, lpparam.classLoader);
-				debugLog(portalHackingParamsClassName + ": class found");
 			} catch (ClassNotFoundError e) {
-				debugLog(portalHackingParamsClassName + ": ClassNotFoundError");
+				log(TAG + portalHackingParamsClassName + ": class not found");
 				return;
 			}
 
 			try {
-				debugLog(userInputGlyphSequenceClassName + ": finding class");
 				userInputGlyphSequenceClass = findClass(userInputGlyphSequenceClassName, lpparam.classLoader);
-				debugLog(userInputGlyphSequenceClassName + ": class found");
 			} catch (ClassNotFoundError e) {
-				debugLog(userInputGlyphSequenceClassName + ": ClassNotFoundError");
+				log(TAG + userInputGlyphSequenceClassName + ": class not found");
 				return;
 			}
 
 			try {
-				debugLog(glyphClassName + ": finding class");
 				glyphClass = findClass(Xglyph.glyphClassName, lpparam.classLoader);
-				debugLog(glyphClassName + ": class found");
 			} catch (ClassNotFoundError e) {
-				debugLog(glyphClassName + ": ClassNotFoundError");
+				log(TAG + glyphClassName + ": class not found");
 				return;
 			}
 
 			try {
-				debugLog(turingClassName + ": finding class");
 				turingClass = findClass(turingClassName, lpparam.classLoader);
-				debugLog(turingClassName + ": class found");
 			} catch (ClassNotFoundError e) {
-				debugLog(turingClassName + ": ClassNotFoundError");
+				log(TAG + turingClassName + ": class not found");
 				return;
 			}
 
 			try {
-				debugLog(speedClassName + ": finding class");
 				speedClass = findClass(speedClassName, lpparam.classLoader);
-				debugLog(speedClassName + ": class found");
 			} catch (ClassNotFoundError e) {
-				debugLog(speedClassName + ": ClassNotFoundError");
+				log(TAG + speedClassName + ": class not found");
 				return;
 			}
 
 			try {
-				debugLog(portalHackingParamsClassName + ": hooking constructor for normal hack");
 				findAndHookConstructor(portalHackingParamsClass, String.class, boolean.class, boolean.class, new NormalHackHook());
-				debugLog(portalHackingParamsClassName + ": constructor for normal hack hooked");
 			} catch (NoSuchMethodError e) {
-				debugLog(portalHackingParamsClassName + ": constructor for normal hack not found");
+				log(TAG + portalHackingParamsClassName + ": constructor for normal hack not found");
 			}
 
 			try {
-				debugLog(portalHackingParamsClassName + ": hooking constructor for glyph hack");
 				findAndHookConstructor(portalHackingParamsClass, String.class, userInputGlyphSequenceClass, userInputGlyphSequenceClass, new GlyphHackHook(glyphClass, userInputGlyphSequenceClass));
-				debugLog(portalHackingParamsClassName + ": constructor for glyph hack hooked");
 			} catch (NoSuchMethodError e) {
-				debugLog(portalHackingParamsClassName + ": constructor for glyph hack not found");
+				log(TAG + portalHackingParamsClassName + ": constructor for glyph hack not found");
 			}
 
 			try {
-				debugLog(turingClassName + "." + turingClassMethodName1 + ": hooking method");
 				findAndHookMethod(turingClass, turingClassMethodName1, String.class, new TranslateGlyphsHook());
-				debugLog(turingClassName + "." + turingClassMethodName1 + ": method hooked");
 			} catch (NoSuchMethodError error) {
-				debugLog(turingClassName + "." + turingClassMethodName1 + ": NoSuchMethodError");
+				log(TAG + turingClassName + "." + turingClassMethodName1 + ": method not found");
 			}
 
 			try {
-				debugLog(turingClassName + "." + turingClassMethodName2 + ": hooking method");
 				findAndHookMethod(turingClass, turingClassMethodName2, new ClearGlyphsHook());
-				debugLog(turingClassName + "." + turingClassMethodName2 + ": method hooked");
 			} catch (NoSuchMethodError error) {
-				debugLog(turingClassName + "." + turingClassMethodName2 + ": NoSuchMethodError");
+				log(TAG + turingClassName + "." + turingClassMethodName2 + ": method not found");
 			}
 
 			try {
-				debugLog(speedClassName + "." + speedClassMethodName + ": hooking method");
 				findAndHookMethod(speedClass, speedClassMethodName, String.class, new GlyphSpeedHook());
-				debugLog(speedClassName + "." + speedClassMethodName + ": method hooked");
 			} catch (NoSuchMethodError error) {
-				debugLog(speedClassName + "." + speedClassMethodName + ": NoSuchMethodError");
+				log(TAG + speedClassName + "." + speedClassMethodName + ": method not found");
 			}
 		} else {
 			debugLog("Xglyph switched off");
@@ -157,26 +141,25 @@ public class Xglyph implements IXposedHookLoadPackage {
 
 // ============================== HideX ==============================
 
-		final String apmClassName = "android.app.ApplicationPackageManager";
 		final Class<?> apmClass;
 
 		try {
 			apmClass = findClass(apmClassName, lpparam.classLoader);
 		} catch (ClassNotFoundError e) {
-			debugLog(apmClassName + ": ClassNotFoundError");
+			log(TAG + apmClassName + ": class not found");
 			return;
 		}
 
 		try {
-			findAndHookMethod(apmClass, "getInstalledApplications", int.class, new InstalledApplicationsHook());
+			findAndHookMethod(apmClass, apmClassMethodName1, int.class, new InstalledApplicationsHook());
 		} catch (NoSuchMethodError error) {
-			debugLog("ApplicationPackageManager.getInstalledApplications: NoSuchMethodError");
+			log(TAG + apmClassName + "." + apmClassMethodName1 + ": method not found");
 		}
 
 		try {
-			findAndHookMethod(apmClass, "getInstalledPackages", int.class, new InstalledPackagesHook());
+			findAndHookMethod(apmClass, apmClassMethodName2, int.class, new InstalledPackagesHook());
 		} catch (NoSuchMethodError error) {
-			debugLog("ApplicationPackageManager.getInstalledPackages: NoSuchMethodError");
+			log(TAG + apmClassName + "." + apmClassMethodName2 + ": method not found");
 		}
 	}
 }
