@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * Based on source code by xfunforx
  */
-public class Translator {
+public class GlyphTranslator {
 	public static List<String> sequence = new ArrayList<>();
 
 	private static Double[] pub = {

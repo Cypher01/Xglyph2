@@ -1,41 +1,43 @@
 package com.cypher.xglyph2;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import com.cypher.xglyph2.hooks.*;
 import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
+import static com.cypher.xglyph2.MainActivity.*;
 import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.getLongField;
-import static de.robv.android.xposed.XposedHelpers.newInstance;
-import static de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
-
-import static com.cypher.xglyph2.MainActivity.ON_OFF;
-import static com.cypher.xglyph2.MainActivity.KEY;
-import static com.cypher.xglyph2.MainActivity.SPEED;
-import static com.cypher.xglyph2.MainActivity.INGRESSPACKAGENAME;
+import static de.robv.android.xposed.XposedHelpers.*;
 
 public class Xglyph implements IXposedHookLoadPackage {
 	private static final String TAG = Xglyph.class.getSimpleName() + ": ";
 
-	final XSharedPreferences pref = new XSharedPreferences(Xglyph.class.getPackage().getName(), MainActivity.PREF);
+	public static final XSharedPreferences pref = new XSharedPreferences(Xglyph.class.getPackage().getName(), PREF);
 
-	private static boolean glyphSpeedTriggered = false;
+	public static final String moreGlyph1 = "ikj";
+	public static final String moreGlyph2 = "jki";
+	public static final String lessGlyph1 = "gkh";
+	public static final String lessGlyph2 = "hkg";
+	public static final String complexGlyph1 = "jkgh";
+	public static final String complexGlyph2 = "hgkj";
+	public static final String simpleGlyph1 = "ji";
+	public static final String simpleGlyph2 = "ij";
 
-	private void debugLog(String message) {
+	public static final String portalHackingParamsClassName = "com.nianticproject.ingress.shared.rpc.PortalHackingParams";
+	public static final String userInputGlyphSequenceClassName = "com.nianticproject.ingress.glyph.UserInputGlyphSequence";
+	public static final String glyphClassName = "com.nianticproject.ingress.glyph.Glyph";
+	public static final String turingClassName = "com.nianticproject.ingress.common.utility.Turing";
+	public static final String turingClassMethodName1 = "g";
+	public static final String turingClassMethodName2 = "l";
+	public static String speedClassName = "o.nb"; // FIXME: this class name is for Ingress v1.108.1 and maybe future versions
+	public static String speedClassMethodName = "ˊ"; // FIXME: this method name is for Ingress v1.99.1 - v1.108.1 and maybe future versions
+
+	public static boolean glyphSpeedTriggered = false;
+
+	public static void debugLog(String message) {
 		pref.reload();
 
-		if (pref.getInt(MainActivity.DEBUGLOG, ON_OFF.OFF.ordinal()) == ON_OFF.ON.ordinal()) {
+		if (pref.getInt(DEBUGLOG, ON_OFF.OFF.ordinal()) == ON_OFF.ON.ordinal()) {
 			log(TAG + "[DEBUG] " + message);
 		}
 	}
@@ -50,36 +52,14 @@ public class Xglyph implements IXposedHookLoadPackage {
 
 		pref.reload();
 
-		if (pref.getInt(MainActivity.ACTIVATE, ON_OFF.OFF.ordinal()) == ON_OFF.ON.ordinal()) {
-			final String moreGlyph1 = "ikj";
-			final String moreGlyph2 = "jki";
-			final String lessGlyph1 = "gkh";
-			final String lessGlyph2 = "hkg";
-			final String complexGlyph1 = "jkgh";
-			final String complexGlyph2 = "hgkj";
-			final String simpleGlyph1 = "ji";
-			final String simpleGlyph2 = "ij";
+		if (pref.getInt(ACTIVATE, ON_OFF.OFF.ordinal()) == ON_OFF.ON.ordinal()) {
+			int ingressVersion = pref.getInt(INGRESSVERSIONCODE, INGRESSVERSION20161102);
 
-			final String portalHackingParamsClassName = "com.nianticproject.ingress.shared.rpc.PortalHackingParams";
-			final String userInputGlyphSequenceClassName = "com.nianticproject.ingress.glyph.UserInputGlyphSequence";
-			final String glyphClassName = "com.nianticproject.ingress.glyph.Glyph";
-			final String turingClassName = "com.nianticproject.ingress.common.utility.Turing";
-			final String turingClassMethodName1 = "g";
-			final String turingClassMethodName2 = "l";
-
-			String speedClassNameTemp = "o.nb"; // FIXME: this class name is for Ingress v1.108.1 and maybe future versions
-			String speedClassMethodNameTemp = "ˊ"; // FIXME: this method name is for Ingress v1.99.1 - v1.108.1 and maybe future versions
-
-			int ingressVersion = pref.getInt(MainActivity.INGRESSVERSIONCODE, MainActivity.INGRESSVERSION20161102);
-
-			if (ingressVersion < MainActivity.INGRESSVERSION20160802) {
-				speedClassNameTemp = "o.mq"; // FIXME: this class name is for Ingress v1.99.1 - v1.104.1
-			} else if (ingressVersion < MainActivity.INGRESSVERSION20161102) {
-				speedClassNameTemp = "o.ms"; // FIXME: this class name is for Ingress v1.105.1 - v1.107.0
+			if (ingressVersion < INGRESSVERSION20160802) {
+				speedClassName = "o.mq"; // FIXME: this class name is for Ingress v1.99.1 - v1.104.1
+			} else if (ingressVersion < INGRESSVERSION20161102) {
+				speedClassName = "o.ms"; // FIXME: this class name is for Ingress v1.105.1 - v1.107.0
 			}
-
-			final String speedClassName = speedClassNameTemp;
-			final String speedClassMethodName = speedClassMethodNameTemp;
 
 			final Class<?> portalHackingParamsClass;
 			final Class<?> userInputGlyphSequenceClass;
@@ -88,263 +68,86 @@ public class Xglyph implements IXposedHookLoadPackage {
 			final Class<?> speedClass;
 
 			try {
+				debugLog(portalHackingParamsClassName + ": finding class");
 				portalHackingParamsClass = findClass(portalHackingParamsClassName, lpparam.classLoader);
+				debugLog(portalHackingParamsClassName + ": class found");
 			} catch (ClassNotFoundError e) {
 				debugLog(portalHackingParamsClassName + ": ClassNotFoundError");
 				return;
 			}
 
 			try {
+				debugLog(userInputGlyphSequenceClassName + ": finding class");
 				userInputGlyphSequenceClass = findClass(userInputGlyphSequenceClassName, lpparam.classLoader);
+				debugLog(userInputGlyphSequenceClassName + ": class found");
 			} catch (ClassNotFoundError e) {
 				debugLog(userInputGlyphSequenceClassName + ": ClassNotFoundError");
 				return;
 			}
 
 			try {
-				glyphClass = findClass(glyphClassName, lpparam.classLoader);
+				debugLog(glyphClassName + ": finding class");
+				glyphClass = findClass(Xglyph.glyphClassName, lpparam.classLoader);
+				debugLog(glyphClassName + ": class found");
 			} catch (ClassNotFoundError e) {
 				debugLog(glyphClassName + ": ClassNotFoundError");
 				return;
 			}
 
 			try {
+				debugLog(turingClassName + ": finding class");
 				turingClass = findClass(turingClassName, lpparam.classLoader);
+				debugLog(turingClassName + ": class found");
 			} catch (ClassNotFoundError e) {
 				debugLog(turingClassName + ": ClassNotFoundError");
 				return;
 			}
 
 			try {
+				debugLog(speedClassName + ": finding class");
 				speedClass = findClass(speedClassName, lpparam.classLoader);
+				debugLog(speedClassName + ": class found");
 			} catch (ClassNotFoundError e) {
 				debugLog(speedClassName + ": ClassNotFoundError");
 				return;
 			}
 
 			try {
-				findAndHookConstructor(portalHackingParamsClass, String.class, boolean.class, boolean.class, new XC_MethodHook() {
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-						debugLog("PortalHackingParams: constructor with (String, boolean, boolean) called");
-
-						String arg0 = (String) param.args[0];
-						boolean glyphGameRequested = (boolean) param.args[1];
-						boolean hackNoKey = (boolean) param.args[2];
-
-						debugLog("arg0 = " + arg0 + ", glyphGameRequested = " + glyphGameRequested + ", hackNoKey = " + hackNoKey);
-
-						if (!glyphGameRequested) {
-							pref.reload();
-							int normalHackKey = pref.getInt(MainActivity.NORMALHACKKEY, KEY.OFF.ordinal());
-
-							if (normalHackKey == KEY.KEY.ordinal()) {
-								param.args[2] = false;
-								debugLog("Normal Hack key request set");
-							} else if (normalHackKey == KEY.NOKEY.ordinal()) {
-								param.args[2] = true;
-								debugLog("Normal Hack no key request set");
-							}
-						}
-					}
-				});
-
-				findAndHookConstructor(portalHackingParamsClass, String.class, userInputGlyphSequenceClass, userInputGlyphSequenceClass, new XC_MethodHook() {
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-						debugLog("PortalHackingParams: constructor with (String, UserInputGlyphSequence, UserInputGlyphSequence) called");
-
-						pref.reload();
-						int correctGlyphs = pref.getInt(MainActivity.CORRECTGLYPHS, ON_OFF.OFF.ordinal());
-						int glyphKey = pref.getInt(MainActivity.GLYPHKEY, KEY.OFF.ordinal());
-						int glyphSpeed = pref.getInt(MainActivity.GLYPHSPEED, SPEED.OFF.ordinal());
-
-						String uigs1 = "null";
-						String uigs2 = "null";
-
-						if (param.args[1] != null) {
-							uigs1 = param.args[1].toString();
-
-							debugLog("original uigs1: " + uigs1);
-
-							if (correctGlyphs == ON_OFF.ON.ordinal()) {
-								List<Object> glyphList = new ArrayList<>();
-
-								for (int i = 0; i < Translator.sequence.size(); i++) {
-									glyphList.add(newInstance(glyphClass, Translator.sequence.get(i)));
-								}
-
-								long inputTimeMs = getLongField(param.args[1], "inputTimeMs");
-
-								debugLog("inputTimeMs = " + inputTimeMs);
-
-								Object uigs = newInstance(userInputGlyphSequenceClass, glyphList, false, inputTimeMs);
-								uigs1 = uigs.toString();
-
-								param.args[1] = uigs;
-							}
-						} else {
-							debugLog("original uigs1: " + uigs1);
-						}
-
-						Object commandGlyphKey = null;
-						Object commandGlyphSpeed = null;
-
-						if (param.args[2] != null) {
-							uigs2 = param.args[2].toString();
-
-							debugLog("original uigs2: " + uigs2);
-
-							List<String> glyphStringList = filterGlyphStrings(uigs2);
-
-							debugLog("command glyph inputs: " + glyphStringList);
-
-							if (glyphStringList.contains(moreGlyph1) || glyphStringList.contains(moreGlyph2)) {
-								commandGlyphKey = newInstance(glyphClass, moreGlyph1);
-							} else if (glyphStringList.contains(lessGlyph1) || glyphStringList.contains(lessGlyph2)) {
-								commandGlyphKey = newInstance(glyphClass, lessGlyph1);
-							}
-
-							if (glyphStringList.contains(complexGlyph1) || glyphStringList.contains(complexGlyph2)) {
-								commandGlyphSpeed = newInstance(glyphClass, complexGlyph1);
-							} else if (glyphStringList.contains(simpleGlyph1) || glyphStringList.contains(simpleGlyph2)) {
-								commandGlyphSpeed = newInstance(glyphClass, simpleGlyph1);
-							}
-						} else {
-							debugLog("original uigs2: " + uigs2);
-						}
-
-						if (commandGlyphKey == null) {
-							if (glyphKey == KEY.KEY.ordinal()) {
-								commandGlyphKey = newInstance(glyphClass, moreGlyph1);
-								debugLog("Glyph Hack key request set");
-							} else if (glyphKey == KEY.NOKEY.ordinal()) {
-								commandGlyphKey = newInstance(glyphClass, lessGlyph1);
-								debugLog("Glyph Hack no key request set");
-							}
-						}
-
-						if (commandGlyphSpeed == null) {
-							if (glyphSpeed == SPEED.FAST.ordinal()) {
-								commandGlyphSpeed = newInstance(glyphClass, complexGlyph1);
-								debugLog("Glyph Hack fast set");
-							} else if (glyphSpeed == SPEED.SLOW.ordinal()) {
-								commandGlyphSpeed = newInstance(glyphClass, simpleGlyph1);
-								debugLog("Glyph Hack slow set");
-							}
-						}
-
-						if (commandGlyphKey != null || commandGlyphSpeed != null) {
-							List<Object> glyphList = new ArrayList<>();
-
-							int min = 0;
-							int max = 0;
-
-							if (commandGlyphKey != null) {
-								glyphList.add(commandGlyphKey);
-
-								min += 400; // average input time for more/less
-								max += 500;
-							}
-
-							if (commandGlyphSpeed != null && glyphSpeedTriggered) {
-								glyphList.add(commandGlyphSpeed);
-
-								if (min != 0) {
-									min += 300; // average time gap between two glyphs
-									max += 300;
-								}
-
-								min += 600; // average input time for complex (simple takes less, but who cares)
-								max += 800;
-
-								glyphSpeedTriggered = false;
-							}
-
-							Random rand = new Random();
-							long randomNum = (long) rand.nextInt((max - min) + 1) + min;
-
-							Object uigs = newInstance(userInputGlyphSequenceClass, glyphList, false, randomNum);
-							uigs2 = uigs.toString();
-
-							param.args[2] = uigs;
-						}
-
-						debugLog("patched uigs1: " + uigs1);
-						debugLog("patched uigs2: " + uigs2);
-					}
-				});
+				debugLog(portalHackingParamsClassName + ": hooking constructor for normal hack");
+				findAndHookConstructor(portalHackingParamsClass, String.class, boolean.class, boolean.class, new NormalHackHook());
+				debugLog(portalHackingParamsClassName + ": constructor for normal hack hooked");
 			} catch (NoSuchMethodError e) {
-				debugLog(portalHackingParamsClassName + ": constructor not found");
+				debugLog(portalHackingParamsClassName + ": constructor for normal hack not found");
 			}
 
 			try {
-				findAndHookMethod(turingClass, turingClassMethodName1, String.class, new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-						debugLog("begin Calculate glyph");
+				debugLog(portalHackingParamsClassName + ": hooking constructor for glyph hack");
+				findAndHookConstructor(portalHackingParamsClass, String.class, userInputGlyphSequenceClass, userInputGlyphSequenceClass, new GlyphHackHook(glyphClass, userInputGlyphSequenceClass));
+				debugLog(portalHackingParamsClassName + ": constructor for glyph hack hooked");
+			} catch (NoSuchMethodError e) {
+				debugLog(portalHackingParamsClassName + ": constructor for glyph hack not found");
+			}
 
-						float[] result = (float[]) param.getResult();
-						String glyph = Translator.translate(result);
-
-						debugLog("glyph: " + glyph);
-
-						Translator.sequence.add(glyph);
-
-						debugLog("sequence.size(): " + Translator.sequence.size());
-					}
-				});
+			try {
+				debugLog(turingClassName + "." + turingClassMethodName1 + ": hooking method");
+				findAndHookMethod(turingClass, turingClassMethodName1, String.class, new TranslateGlyphsHook());
+				debugLog(turingClassName + "." + turingClassMethodName1 + ": method hooked");
 			} catch (NoSuchMethodError error) {
 				debugLog(turingClassName + "." + turingClassMethodName1 + ": NoSuchMethodError");
 			}
 
 			try {
-				findAndHookMethod(turingClass, turingClassMethodName2, new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-						Translator.sequence.clear();
-					}
-				});
+				debugLog(turingClassName + "." + turingClassMethodName2 + ": hooking method");
+				findAndHookMethod(turingClass, turingClassMethodName2, new ClearGlyphsHook());
+				debugLog(turingClassName + "." + turingClassMethodName2 + ": method hooked");
 			} catch (NoSuchMethodError error) {
 				debugLog(turingClassName + "." + turingClassMethodName2 + ": NoSuchMethodError");
 			}
 
 			try {
-				findAndHookMethod(speedClass, speedClassMethodName, String.class, new XC_MethodHook() {
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-						debugLog("nb." + speedClassMethodName + " called");
-
-						String glyphString = (String) param.args[0];
-
-						debugLog("param[0]: " + glyphString);
-
-						glyphSpeedTriggered = true;
-
-						pref.reload();
-						int glyphSpeed = pref.getInt(MainActivity.GLYPHSPEED, SPEED.OFF.ordinal());
-
-						if (glyphSpeed != SPEED.OFF.ordinal()) {
-							String commandGlyphString = "";
-
-							if (glyphString.equals(complexGlyph1) || glyphString.equals(complexGlyph2)) {
-								commandGlyphString = complexGlyph1;
-							} else if (glyphString.equals(simpleGlyph1) || glyphString.equals(simpleGlyph2)) {
-								commandGlyphString = simpleGlyph1;
-							}
-
-							if (commandGlyphString.equals("")) {
-								if (glyphSpeed == SPEED.FAST.ordinal()) {
-									param.args[0] = complexGlyph1;
-									debugLog("Glyph Hack fast set");
-								} else if (glyphSpeed == SPEED.SLOW.ordinal()) {
-									param.args[0] = simpleGlyph1;
-									debugLog("Glyph Hack slow set");
-								}
-							}
-						}
-					}
-				});
+				debugLog(speedClassName + "." + speedClassMethodName + ": hooking method");
+				findAndHookMethod(speedClass, speedClassMethodName, String.class, new GlyphSpeedHook());
+				debugLog(speedClassName + "." + speedClassMethodName + ": method hooked");
 			} catch (NoSuchMethodError error) {
 				debugLog(speedClassName + "." + speedClassMethodName + ": NoSuchMethodError");
 			}
@@ -365,68 +168,15 @@ public class Xglyph implements IXposedHookLoadPackage {
 		}
 
 		try {
-			findAndHookMethod(apmClass, "getInstalledApplications", int.class, new XC_MethodHook() {
-				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-					List installedApplications = (List) param.getResult();
-
-					ArrayList<ApplicationInfo> sortedOutApplications = new ArrayList<>();
-
-					for (Object application : installedApplications) {
-						ApplicationInfo applicationInfo = (ApplicationInfo) application;
-
-						if (!applicationInfo.packageName.contains(Xglyph.class.getPackage().getName())) {
-							sortedOutApplications.add(applicationInfo);
-						}
-					}
-
-					param.setResult(sortedOutApplications);
-				}
-			});
+			findAndHookMethod(apmClass, "getInstalledApplications", int.class, new InstalledApplicationsHook());
 		} catch (NoSuchMethodError error) {
 			debugLog("ApplicationPackageManager.getInstalledApplications: NoSuchMethodError");
 		}
 
 		try {
-			findAndHookMethod(apmClass, "getInstalledPackages", int.class, new XC_MethodHook() {
-				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-					List installedPackages = (List) param.getResult();
-
-					ArrayList<PackageInfo> sortedOutPackages = new ArrayList<>();
-
-					for (Object installedPackage : installedPackages) {
-						PackageInfo packageInfo = (PackageInfo) installedPackage;
-
-						if (!packageInfo.packageName.contains(Xglyph.class.getPackage().getName())) {
-							sortedOutPackages.add(packageInfo);
-						}
-					}
-
-					param.setResult(sortedOutPackages);
-				}
-			});
+			findAndHookMethod(apmClass, "getInstalledPackages", int.class, new InstalledPackagesHook());
 		} catch (NoSuchMethodError error) {
 			debugLog("ApplicationPackageManager.getInstalledPackages: NoSuchMethodError");
 		}
-	}
-
-	private List<String> filterGlyphStrings(String sequence) {
-		List<String> glyphStringList = new ArrayList<>();
-
-		int glyphStart;
-		int glyphStop = 0;
-		String glyphString;
-
-		while(!sequence.substring(glyphStop, glyphStop + 2).equals("}]")) {
-			glyphStart = sequence.substring(glyphStop).indexOf("glyphOrder=") + 11 + glyphStop;
-			glyphStop  = sequence.substring(glyphStart).indexOf("}") + glyphStart;
-
-			glyphString = sequence.substring(glyphStart, glyphStop);
-
-			glyphStringList.add(glyphString);
-		}
-
-		return glyphStringList;
 	}
 }
