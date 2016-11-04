@@ -67,11 +67,15 @@ public class Xglyph implements IXposedHookLoadPackage {
 			final String turingClassMethodName1 = "g";
 			final String turingClassMethodName2 = "l";
 
-			String speedClassNameTemp = "o.ms"; // FIXME: this class name is for Ingress v1.105.1 and maybe future versions
-			String speedClassMethodNameTemp = "ˊ"; // FIXME: this method name is for Ingress v1.99.1 - v1.105.1 and maybe future versions
+			String speedClassNameTemp = "o.nb"; // FIXME: this class name is for Ingress v1.108.1 and maybe future versions
+			String speedClassMethodNameTemp = "ˊ"; // FIXME: this method name is for Ingress v1.99.1 - v1.108.1 and maybe future versions
 
-			if (pref.getInt(MainActivity.INGRESSVERSIONCODE, MainActivity.INGRESSVERSION20160802) < MainActivity.INGRESSVERSION20160802) {
+			int ingressVersion = pref.getInt(MainActivity.INGRESSVERSIONCODE, MainActivity.INGRESSVERSION20161102);
+
+			if (ingressVersion < MainActivity.INGRESSVERSION20160802) {
 				speedClassNameTemp = "o.mq"; // FIXME: this class name is for Ingress v1.99.1 - v1.104.1
+			} else if (ingressVersion < MainActivity.INGRESSVERSION20161102) {
+				speedClassNameTemp = "o.ms"; // FIXME: this class name is for Ingress v1.105.1 - v1.107.0
 			}
 
 			final String speedClassName = speedClassNameTemp;
@@ -309,7 +313,7 @@ public class Xglyph implements IXposedHookLoadPackage {
 				findAndHookMethod(speedClass, speedClassMethodName, String.class, new XC_MethodHook() {
 					@Override
 					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-						debugLog("mq." + speedClassMethodName + " called");
+						debugLog("nb." + speedClassMethodName + " called");
 
 						String glyphString = (String) param.args[0];
 

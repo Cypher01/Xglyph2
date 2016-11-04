@@ -34,6 +34,7 @@ public class MainActivity extends Activity {
 
 	public static final String INGRESSPACKAGENAME = "com.nianticproject.ingress";
 	public static final int INGRESSVERSION20160802 = 11051;
+	public static final int INGRESSVERSION20161102 = 11081;
 
 	public static final String PREF = TAG + "_Pref";
 	public static final String ACTIVATE = TAG + "_Activate";
