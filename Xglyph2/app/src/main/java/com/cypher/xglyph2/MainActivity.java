@@ -211,6 +211,8 @@ public class MainActivity extends Activity {
 		activate = ON_OFF.values()[prefActivate];
 		button_activate.setText(activateText[prefActivate]);
 
+		toggleActivateButtonBackground();
+
 		correctGlyphs = ON_OFF.values()[prefCorrectGlyphs];
 		button_correctGlyphs.setText(correctGlyphsText[prefCorrectGlyphs]);
 
@@ -259,6 +261,8 @@ public class MainActivity extends Activity {
 			public void onClick(View view) {
 				activate = ON_OFF.values()[(activate.ordinal() + 1) % ON_OFF.values().length];
 				button_activate.setText(activateText[activate.ordinal()]);
+
+				toggleActivateButtonBackground();
 
 				buttonSound();
 
@@ -431,6 +435,15 @@ public class MainActivity extends Activity {
 				);
 			}
 		});
+	}
+
+	// FIXME: experimental code, deprecated API, don't use this at the moment
+	private void toggleActivateButtonBackground() {
+		/*if (activate == ON_OFF.OFF) {
+			button_activate.setBackgroundDrawable(getResources().getDrawable(R.drawable.rectangle_red));
+		} else {
+			button_activate.setBackgroundDrawable(getResources().getDrawable(R.drawable.rectangle_cyan));
+		}*/
 	}
 
 	private void startSound() {
