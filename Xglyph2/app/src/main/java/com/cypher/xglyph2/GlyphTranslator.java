@@ -10,6 +10,16 @@ import java.util.Random;
 public class GlyphTranslator {
 	public static List<String> sequence = new ArrayList<>();
 
+	//         a
+	//
+	// f               b
+	//     g       h
+	//         k
+	//     j       i
+	// e               c
+	//
+	//         d
+
 	private static Double[] pub = {
 			 0.0,  1.0, // a
 			 0.8,  0.4, // b

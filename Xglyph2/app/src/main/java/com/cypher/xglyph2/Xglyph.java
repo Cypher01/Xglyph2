@@ -22,6 +22,7 @@ public class Xglyph implements IXposedHookLoadPackage {
 	public static final String complexGlyph2 = "hgkj";
 	public static final String simpleGlyph1 = "ji";
 	public static final String simpleGlyph2 = "ij";
+	public static final String normalSpeedTrigger = "a"; // TODO: make this configurable
 
 	public static final String portalHackingParamsClassName = "com.nianticproject.ingress.shared.rpc.PortalHackingParams";
 	public static final String userInputGlyphSequenceClassName = "com.nianticproject.ingress.glyph.UserInputGlyphSequence";
@@ -56,7 +57,7 @@ public class Xglyph implements IXposedHookLoadPackage {
 
 		pref.reload();
 
-		if (pref.getInt(ACTIVATE, ON_OFF.OFF.ordinal()) == ON_OFF.ON.ordinal()) {
+		if (pref.getInt(ACTIVATE, ON_OFF.ON.ordinal()) == ON_OFF.ON.ordinal()) {
 			int ingressVersion = pref.getInt(INGRESSVERSIONCODE, INGRESSVERSION20161102);
 
 			if (ingressVersion < INGRESSVERSION20160802) {

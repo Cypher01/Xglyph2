@@ -77,7 +77,7 @@
 
 						<Button
 							style="@style/ButtonStyle"
-							android:text="@string/activate_off"
+							android:text="@string/activate_on"
 							android:id="@+id/button_activate"/>
 
 					</LinearLayout>
@@ -129,7 +129,7 @@
 
 						<Button
 							style="@style/ButtonStyle"
-							android:text="@string/correct_glyphs_off"
+							android:text="@string/correct_glyphs_on"
 							android:id="@+id/button_correctGlyphs"/>
 
 					</LinearLayout>

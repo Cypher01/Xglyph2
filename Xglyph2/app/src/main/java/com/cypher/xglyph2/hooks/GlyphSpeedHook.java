@@ -27,6 +27,10 @@ public class GlyphSpeedHook extends XC_MethodHook {
 				commandGlyphString = complexGlyph1;
 			} else if (glyphString.equals(simpleGlyph1) || glyphString.equals(simpleGlyph2)) {
 				commandGlyphString = simpleGlyph1;
+			} else if (glyphString.equals(normalSpeedTrigger)) {
+				commandGlyphString = normalSpeedTrigger;
+				glyphSpeedTriggered = false;
+				debugLog("Glyph Hack normal speed set");
 			}
 
 			if (commandGlyphString.equals("")) {

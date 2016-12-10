@@ -27,7 +27,7 @@ public class GlyphHackHook extends XC_MethodHook {
 
 		pref.reload();
 
-		int correctGlyphs = pref.getInt(CORRECTGLYPHS, ON_OFF.OFF.ordinal());
+		int correctGlyphs = pref.getInt(CORRECTGLYPHS, ON_OFF.ON.ordinal());
 		int glyphKey = pref.getInt(GLYPHKEY, KEY.OFF.ordinal());
 		int glyphSpeed = pref.getInt(GLYPHSPEED, SPEED.OFF.ordinal());
 
@@ -96,7 +96,7 @@ public class GlyphHackHook extends XC_MethodHook {
 			}
 		}
 
-		if (commandGlyphSpeed == null) {
+		if (commandGlyphSpeed == null && glyphSpeedTriggered) {
 			if (glyphSpeed == SPEED.FAST.ordinal()) {
 				commandGlyphSpeed = newInstance(glyphClass, complexGlyph1);
 				debugLog("Glyph Hack fast set");

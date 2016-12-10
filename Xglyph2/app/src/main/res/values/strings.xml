@@ -32,7 +32,7 @@
 	<string name="description_command_channel_fast">Automatically send a \'COMPLEX\' glyph to speed up the glyph sequence prompt. You have to touch the command glyph interface to trigger this!</string>
 	<string name="description_command_channel_slow">Automatically send a \'SIMPLE\' glyph to slow down the glyph sequence prompt. You have to touch the command glyph interface to trigger this!</string>
 	<string name="description_command_channel_override_header">Overriding</string>
-	<string name="description_command_channel_override">If you draw a correct \'MORE\' or \'LESS\' command glyph, it overrides the Glyph Hack Key configuration. And if you draw a correct \'COMPLEX\' or \'SIMPLE\' command glyph, it overrides the Glyph Hack Speed configuration. Key and speed overriding are also combinable.</string>
+	<string name="description_command_channel_override">If you draw a correct \'MORE\' or \'LESS\' command glyph, it overrides the Glyph Hack Key configuration.\nAnd if you draw a correct \'COMPLEX\' or \'SIMPLE\' command glyph, it overrides the Glyph Hack Speed configuration.\nIf you touch the very top dot of the command glyph interface, the glyph speed is set to normal, ignoring the Glyph Hack Speed configuration.\nKey and speed overriding are also combinable.</string>
 
 	<string name="description_misc_sound_header">Sound</string>
 	<string name="description_misc_sound">Turn on/off Xglyph sounds.</string>

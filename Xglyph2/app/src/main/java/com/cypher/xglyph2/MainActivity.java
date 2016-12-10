@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -22,12 +21,9 @@ import android.widget.Toast;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 public class MainActivity extends Activity {
 	private static final String TAG = "Xglyph2";
@@ -161,25 +157,13 @@ public class MainActivity extends Activity {
 
 		setListeners();
 
-		try {
-			String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+		String buildDate = dateFormat.format(new java.util.Date(BuildConfig.TIMESTAMP));
 
-			ZipFile zf = new ZipFile(getPackageManager().getApplicationInfo(getPackageName(), 0).sourceDir);
-			ZipEntry ze = zf.getEntry("classes.dex");
-			long time = ze.getTime();
-			zf.close();
+		String text = res.getString(R.string.app_name) + " " + String.format(res.getString(R.string.credits_version), BuildConfig.VERSION_NAME, buildDate);
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-			String buildDate = dateFormat.format(new java.util.Date(time));
-
-			String text = res.getString(R.string.app_name) + " " + String.format(res.getString(R.string.credits_version), version, buildDate);
-
-			TextView tv_credits = (TextView) findViewById(R.id.tv_credits);
-
-			if (tv_credits != null) {
-				tv_credits.setText(text);
-			}
-		} catch (PackageManager.NameNotFoundException | IOException ignored) { }
+		TextView tv_credits = (TextView) findViewById(R.id.tv_credits);
+		tv_credits.setText(text);
 
 		try {
 			PackageInfo ingress = findIngress();
@@ -200,8 +184,8 @@ public class MainActivity extends Activity {
 
 		showToast = false;
 
-		int prefActivate = pref.getInt(ACTIVATE, ON_OFF.OFF.ordinal());
-		int prefCorrectGlyphs = pref.getInt(CORRECTGLYPHS, ON_OFF.OFF.ordinal());
+		int prefActivate = pref.getInt(ACTIVATE, ON_OFF.ON.ordinal());
+		int prefCorrectGlyphs = pref.getInt(CORRECTGLYPHS, ON_OFF.ON.ordinal());
 		int prefGlyphKey = pref.getInt(GLYPHKEY, KEY.OFF.ordinal());
 		int prefGlyphSpeed = pref.getInt(GLYPHSPEED, SPEED.OFF.ordinal());
 		int prefNormalHack = pref.getInt(NORMALHACKKEY, KEY.OFF.ordinal());
