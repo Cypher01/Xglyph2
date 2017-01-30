@@ -7,6 +7,10 @@
 
 	<string name="warning_ingress_version_header">Ingress is not installed</string>
 	<string name="warning_ingress_version">This Xposed module is to be used for Niantic\'s augmented reality game Ingress. It won\'t help you without the game.</string>
+	<string name="warning_xposed_activation_header">Module is not activated</string>
+	<string name="warning_xposed_activation">It seems that Xglyph² is not activated in the Xposed installer. Activate it and reboot.</string>
+	<string name="warning_xposed_header">Xposed is not installed</string>
+	<string name="warning_xposed">Xglyph² is an Xposed module. It seems that you don\'t have the Xposed Framework installed. The module won\'t work without the framework.</string>
 	<string name="warning_bitcoin_header">No Bitcoin wallet installed</string>
 	<string name="warning_bitcoin">It seems that you don\'t have a Bitcoin wallet installed.\nIf you want to get started with Bitcoin, I recommend Mycelium.</string>
 

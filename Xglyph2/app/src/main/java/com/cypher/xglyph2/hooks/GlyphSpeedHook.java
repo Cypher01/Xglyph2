@@ -42,6 +42,8 @@ public class GlyphSpeedHook extends XC_MethodHook {
 					debugLog("Glyph Hack slow set");
 				}
 			}
+		} else {
+			debugLog("Glyph Hack speed switched off");
 		}
 	}
 }

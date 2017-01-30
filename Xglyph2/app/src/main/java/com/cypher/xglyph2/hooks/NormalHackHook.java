@@ -28,6 +28,8 @@ public class NormalHackHook extends XC_MethodHook {
 			} else if (normalHackKey == KEY.NOKEY.ordinal()) {
 				param.args[2] = true;
 				debugLog("Normal Hack no key request set");
+			} else {
+				debugLog("Normal Hack switched off");
 			}
 		}
 	}

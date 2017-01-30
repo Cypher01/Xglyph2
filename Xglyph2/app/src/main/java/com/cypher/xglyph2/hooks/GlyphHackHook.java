@@ -34,29 +34,39 @@ public class GlyphHackHook extends XC_MethodHook {
 		String uigs1 = "null";
 		String uigs2 = "null";
 
+		boolean bypassed = false;
+
 		if (param.args[1] != null) {
 			uigs1 = param.args[1].toString();
 
 			debugLog("original uigs1: " + uigs1);
 
-			if (correctGlyphs == ON_OFF.ON.ordinal()) {
-				List<Object> glyphList = new ArrayList<>();
+			bypassed = getBooleanField(param.args[1], "bypassed");
 
-				for (int i = 0; i < GlyphTranslator.sequence.size(); i++) {
-					glyphList.add(newInstance(glyphClass, GlyphTranslator.sequence.get(i)));
+			debugLog("bypassed: " + bypassed);
+
+			if (!bypassed) {
+				if (correctGlyphs == ON_OFF.ON.ordinal()) {
+					List<Object> glyphList = new ArrayList<>();
+
+					for (int i = 0; i < GlyphTranslator.sequence.size(); i++) {
+						glyphList.add(newInstance(glyphClass, GlyphTranslator.sequence.get(i)));
+					}
+
+					long inputTimeMs = getLongField(param.args[1], "inputTimeMs");
+
+					debugLog("inputTimeMs = " + inputTimeMs);
+
+					Object uigs = newInstance(userInputGlyphSequenceClass, glyphList, false, inputTimeMs);
+					uigs1 = uigs.toString();
+
+					param.args[1] = uigs;
+				} else {
+					debugLog("Correct Glyphs switched off");
 				}
-
-				long inputTimeMs = getLongField(param.args[1], "inputTimeMs");
-
-				debugLog("inputTimeMs = " + inputTimeMs);
-
-				Object uigs = newInstance(userInputGlyphSequenceClass, glyphList, false, inputTimeMs);
-				uigs1 = uigs.toString();
-
-				param.args[1] = uigs;
 			}
 		} else {
-			debugLog("original uigs1: " + uigs1);
+			debugLog("original uigs1: " + uigs1 + " (else)");
 		}
 
 		Object commandGlyphKey = null;
@@ -67,79 +77,95 @@ public class GlyphHackHook extends XC_MethodHook {
 
 			debugLog("original uigs2: " + uigs2);
 
-			List<String> glyphStringList = filterGlyphStrings(uigs2);
+			bypassed = getBooleanField(param.args[2], "bypassed");
 
-			debugLog("command glyph inputs: " + glyphStringList);
+			debugLog("bypassed: " + bypassed);
 
-			if (glyphStringList.contains(moreGlyph1) || glyphStringList.contains(moreGlyph2)) {
-				commandGlyphKey = newInstance(glyphClass, moreGlyph1);
-			} else if (glyphStringList.contains(lessGlyph1) || glyphStringList.contains(lessGlyph2)) {
-				commandGlyphKey = newInstance(glyphClass, lessGlyph1);
-			}
+			if (!bypassed) { // this should never happen, because param.args[2] is null in case of bypassed, but let's check it for the sake of completeness
+				List<String> glyphStringList = filterGlyphStrings(uigs2);
 
-			if (glyphStringList.contains(complexGlyph1) || glyphStringList.contains(complexGlyph2)) {
-				commandGlyphSpeed = newInstance(glyphClass, complexGlyph1);
-			} else if (glyphStringList.contains(simpleGlyph1) || glyphStringList.contains(simpleGlyph2)) {
-				commandGlyphSpeed = newInstance(glyphClass, simpleGlyph1);
-			}
-		} else {
-			debugLog("original uigs2: " + uigs2);
-		}
+				debugLog("command glyph inputs: " + glyphStringList);
 
-		if (commandGlyphKey == null) {
-			if (glyphKey == KEY.KEY.ordinal()) {
-				commandGlyphKey = newInstance(glyphClass, moreGlyph1);
-				debugLog("Glyph Hack key request set");
-			} else if (glyphKey == KEY.NOKEY.ordinal()) {
-				commandGlyphKey = newInstance(glyphClass, lessGlyph1);
-				debugLog("Glyph Hack no key request set");
-			}
-		}
-
-		if (commandGlyphSpeed == null && glyphSpeedTriggered) {
-			if (glyphSpeed == SPEED.FAST.ordinal()) {
-				commandGlyphSpeed = newInstance(glyphClass, complexGlyph1);
-				debugLog("Glyph Hack fast set");
-			} else if (glyphSpeed == SPEED.SLOW.ordinal()) {
-				commandGlyphSpeed = newInstance(glyphClass, simpleGlyph1);
-				debugLog("Glyph Hack slow set");
-			}
-		}
-
-		if (commandGlyphKey != null || commandGlyphSpeed != null) {
-			List<Object> glyphList = new ArrayList<>();
-
-			int min = 0;
-			int max = 0;
-
-			if (commandGlyphKey != null) {
-				glyphList.add(commandGlyphKey);
-
-				min += 400; // average input time for more/less
-				max += 500;
-			}
-
-			if (commandGlyphSpeed != null && glyphSpeedTriggered) {
-				glyphList.add(commandGlyphSpeed);
-
-				if (min != 0) {
-					min += 300; // average time gap between two glyphs
-					max += 300;
+				if (glyphStringList.contains(moreGlyph1) || glyphStringList.contains(moreGlyph2)) {
+					commandGlyphKey = newInstance(glyphClass, moreGlyph1);
+					debugLog("Glyph Hack key request set (overridden)");
+				} else if (glyphStringList.contains(lessGlyph1) || glyphStringList.contains(lessGlyph2)) {
+					commandGlyphKey = newInstance(glyphClass, lessGlyph1);
+					debugLog("Glyph Hack no key request set (overridden)");
 				}
 
-				min += 600; // average input time for complex (simple takes less, but who cares)
-				max += 800;
+				if (glyphStringList.contains(complexGlyph1) || glyphStringList.contains(complexGlyph2)) {
+					commandGlyphSpeed = newInstance(glyphClass, complexGlyph1);
+					debugLog("Glyph Hack fast set (overridden)");
+				} else if (glyphStringList.contains(simpleGlyph1) || glyphStringList.contains(simpleGlyph2)) {
+					commandGlyphSpeed = newInstance(glyphClass, simpleGlyph1);
+					debugLog("Glyph Hack slow set (overridden)");
+				}
+			}
+		} else {
+			debugLog("original uigs2: " + uigs2 + " (else)");
+		}
 
-				glyphSpeedTriggered = false;
+		if (!bypassed) {
+			if (commandGlyphKey == null) {
+				if (glyphKey == KEY.KEY.ordinal()) {
+					commandGlyphKey = newInstance(glyphClass, moreGlyph1);
+					debugLog("Glyph Hack key request set");
+				} else if (glyphKey == KEY.NOKEY.ordinal()) {
+					commandGlyphKey = newInstance(glyphClass, lessGlyph1);
+					debugLog("Glyph Hack no key request set");
+				} else {
+					debugLog("Glyph Hack key switched off");
+				}
 			}
 
-			Random rand = new Random();
-			long randomNum = (long) rand.nextInt((max - min) + 1) + min;
+			if (commandGlyphSpeed == null && glyphSpeedTriggered) {
+				if (glyphSpeed == SPEED.FAST.ordinal()) {
+					commandGlyphSpeed = newInstance(glyphClass, complexGlyph1);
+					debugLog("Glyph Hack fast set");
+				} else if (glyphSpeed == SPEED.SLOW.ordinal()) {
+					commandGlyphSpeed = newInstance(glyphClass, simpleGlyph1);
+					debugLog("Glyph Hack slow set");
+				} else {
+					debugLog("Glyph Hack speed switched off");
+				}
+			}
 
-			Object uigs = newInstance(userInputGlyphSequenceClass, glyphList, false, randomNum);
-			uigs2 = uigs.toString();
+			if (commandGlyphKey != null || commandGlyphSpeed != null) {
+				List<Object> glyphList = new ArrayList<>();
 
-			param.args[2] = uigs;
+				int min = 0;
+				int max = 0;
+
+				if (commandGlyphKey != null) {
+					glyphList.add(commandGlyphKey);
+
+					min += 400; // average input time for more/less
+					max += 500;
+				}
+
+				if (commandGlyphSpeed != null && glyphSpeedTriggered) {
+					glyphList.add(commandGlyphSpeed);
+
+					if (min != 0) {
+						min += 300; // average time gap between two glyphs
+						max += 300;
+					}
+
+					min += 600; // average input time for complex (simple takes less, but who cares)
+					max += 800;
+
+					glyphSpeedTriggered = false;
+				}
+
+				Random rand = new Random();
+				long randomNum = (long) rand.nextInt((max - min) + 1) + min;
+
+				Object uigs = newInstance(userInputGlyphSequenceClass, glyphList, false, randomNum);
+				uigs2 = uigs.toString();
+
+				param.args[2] = uigs;
+			}
 		}
 
 		debugLog("patched uigs1: " + uigs1);

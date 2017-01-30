@@ -26,8 +26,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends Activity {
-	private static final String TAG = "Xglyph2";
+	public static final String TAG = "Xglyph2";
 
+	public static final String XPOSEDINSTALLERPACKAGENAME = "de.robv.android.xposed.installer";
 	public static final String INGRESSPACKAGENAME = "com.nianticproject.ingress";
 	public static final int INGRESSVERSION20160802 = 11051;
 	public static final int INGRESSVERSION20161102 = 11081;
@@ -166,13 +167,29 @@ public class MainActivity extends Activity {
 		tv_credits.setText(text);
 
 		try {
-			PackageInfo ingress = findIngress();
+			PackageInfo ingress = findPackage(INGRESSPACKAGENAME);
 			pref.edit().putInt(INGRESSVERSIONCODE, ingress.versionCode).apply();
-		} catch (IngressNotInstalledException e) {
+		} catch (AppNotInstalledException e) {
 			showDialog(
 					res.getString(R.string.warning_ingress_version_header),
 					res.getString(R.string.warning_ingress_version)
 			);
+		}
+
+		if (!isXposedEnabled()) {
+			try {
+				findPackage(XPOSEDINSTALLERPACKAGENAME);
+
+				showDialog(
+						res.getString(R.string.warning_xposed_activation_header),
+						res.getString(R.string.warning_xposed_activation)
+				);
+			} catch (AppNotInstalledException e) {
+				showDialog(
+						res.getString(R.string.warning_xposed_header),
+						res.getString(R.string.warning_xposed)
+				);
+			}
 		}
 
 		descriptionHint();
@@ -515,16 +532,21 @@ public class MainActivity extends Activity {
 		description.show();
 	}
 
-	private PackageInfo findIngress() throws IngressNotInstalledException {
+	private PackageInfo findPackage(String packageName) throws AppNotInstalledException {
 		List<PackageInfo> installedPackages = getPackageManager().getInstalledPackages(0);
 
 		for (PackageInfo installedPackage : installedPackages) {
-			if (installedPackage.packageName.equals(INGRESSPACKAGENAME)) {
+			if (installedPackage.packageName.equals(packageName)) {
 				return installedPackage;
 			}
 		}
 
-		throw new IngressNotInstalledException();
+		throw new AppNotInstalledException();
+	}
+
+	private boolean isXposedEnabled() {
+		// This method will be hooked to return true
+		return false;
 	}
 
 	private void descriptionHint() {

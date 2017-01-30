@@ -2,6 +2,7 @@ package com.cypher.xglyph2;
 
 import com.cypher.xglyph2.hooks.*;
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
@@ -10,7 +11,7 @@ import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.*;
 
 public class Xglyph implements IXposedHookLoadPackage {
-	private static final String TAG = Xglyph.class.getSimpleName() + ": ";
+	public static final String TAG = Xglyph.class.getSimpleName() + ": ";
 
 	public static final XSharedPreferences pref = new XSharedPreferences(Xglyph.class.getPackage().getName(), PREF);
 
@@ -49,6 +50,17 @@ public class Xglyph implements IXposedHookLoadPackage {
 
 	@Override
 	public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+		if (lpparam.packageName.equals(BuildConfig.APPLICATION_ID)) {
+			findAndHookMethod("com.cypher.xglyph2.MainActivity", lpparam.classLoader, "isXposedEnabled", new XC_MethodHook() {
+				@Override
+				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+					param.setResult(true);
+				}
+			});
+
+			return;
+		}
+
 		if (!lpparam.packageName.equals(INGRESSPACKAGENAME)) {
 			return;
 		}

@@ -1,5 +1,5 @@
 package com.cypher.xglyph2;
 
-public class IngressNotInstalledException extends Exception {
+public class AppNotInstalledException extends Exception {
 	// TODO: insert anything here?
 }
