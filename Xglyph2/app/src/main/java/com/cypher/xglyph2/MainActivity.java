@@ -176,15 +176,21 @@ public class MainActivity extends Activity {
 			);
 		}
 
+		// first, check if self hooking works
 		if (!isXposedEnabled()) {
 			try {
+				// second, check if the Xposed Framework is installed/loaded and the Xposed Installer is installed
+				if (!isXposedAvailable()) {
+					throw new XposedNotInstalledException();
+				}
+
 				findPackage(XPOSEDINSTALLERPACKAGENAME);
 
 				showDialog(
 						res.getString(R.string.warning_xposed_activation_header),
 						res.getString(R.string.warning_xposed_activation)
 				);
-			} catch (AppNotInstalledException e) {
+			} catch (AppNotInstalledException | XposedNotInstalledException e) {
 				showDialog(
 						res.getString(R.string.warning_xposed_header),
 						res.getString(R.string.warning_xposed)
@@ -542,6 +548,16 @@ public class MainActivity extends Activity {
 		}
 
 		throw new AppNotInstalledException();
+	}
+
+	private boolean isXposedAvailable() {
+		if (System.getenv("CLASSPATH") != null) {
+			if (System.getenv("CLASSPATH").contains("Xposed")) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private boolean isXposedEnabled() {
