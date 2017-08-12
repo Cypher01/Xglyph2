@@ -55,7 +55,7 @@ public class Xglyph implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 	public static void debugLog(String message) {
 		pref.reload();
 
-		if (pref.getInt(DEBUGLOG, ON_OFF.OFF.ordinal()) == ON_OFF.ON.ordinal()) {
+		if (pref.getInt(DEBUGLOG, ON_OFF.ON.ordinal()) == ON_OFF.ON.ordinal()) {
 			log(TAG + "[DEBUG] " + message);
 		}
 	}

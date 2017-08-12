@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 	public static final int GLYPHSPEED_DEFAULT = SPEED.OFF.ordinal();
 	public static final int NORMALHACKKEY_DEFAULT = KEY.OFF.ordinal();
 	public static final int SOUND_DEFAULT = ON_OFF.ON.ordinal();
-	public static final int DEBUGLOG_DEFAULT = ON_OFF.OFF.ordinal();
+	public static final int DEBUGLOG_DEFAULT = ON_OFF.ON.ordinal();
 
 	public enum ON_OFF {OFF, ON}
 	public enum KEY {OFF, KEY, NOKEY}
