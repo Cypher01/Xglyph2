@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
 	compileSdkVersion 25
-	buildToolsVersion "25.0.2"
+	buildToolsVersion "26.0.1"
 
 	defaultConfig {
 		applicationId "com.cypher.xglyph2"
 		minSdkVersion 14
 		targetSdkVersion 25
-		versionCode 6
-		versionName "1.4.1"
+		versionCode 7
+		versionName "1.4.2"
 
 		buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 	}

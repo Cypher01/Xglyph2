@@ -2,6 +2,7 @@ package com.cypher.xglyph2;
 
 import com.cypher.xglyph2.hooks.*;
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -10,7 +11,7 @@ import static com.cypher.xglyph2.MainActivity.*;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.*;
 
-public class Xglyph implements IXposedHookLoadPackage {
+public class Xglyph implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 	public static final String TAG = Xglyph.class.getSimpleName() + ": ";
 
 	public static final XSharedPreferences pref = new XSharedPreferences(Xglyph.class.getPackage().getName(), PREF);
@@ -31,14 +32,25 @@ public class Xglyph implements IXposedHookLoadPackage {
 	public static final String turingClassName = "com.nianticproject.ingress.common.utility.Turing";
 	public static final String turingClassMethodName1 = "g";
 	public static final String turingClassMethodName2 = "l";
-	public static String speedClassName = "o.nb"; // FIXME: this class name is for Ingress v1.108.1 and maybe future versions
-	public static String speedClassMethodName = "ˊ"; // FIXME: this method name is for Ingress v1.99.1 - v1.108.1 and maybe future versions
+	public static String speedClassName = "o.nb"; // FIXME: this class name is for Ingress v1.108.1 - v1.121.0 and maybe future versions
+	public static String speedClassMethodName = "ˊ"; // FIXME: this method name is for Ingress v1.99.1 - v1.121.0 and maybe future versions
 
 	public static final String apmClassName = "android.app.ApplicationPackageManager";
 	public static final String apmClassMethodName1 = "getInstalledApplications";
 	public static final String apmClassMethodName2 = "getInstalledPackages";
 
 	public static boolean glyphSpeedTriggered = false;
+
+	@Override
+	public void initZygote(StartupParam startupParam) throws Throwable {
+		boolean worldReadable = pref.makeWorldReadable();
+
+		if (worldReadable) {
+			debugLog("Preferences set world readable");
+		} else {
+			debugLog("Preferences set world readable FAILED");
+		}
+	}
 
 	public static void debugLog(String message) {
 		pref.reload();

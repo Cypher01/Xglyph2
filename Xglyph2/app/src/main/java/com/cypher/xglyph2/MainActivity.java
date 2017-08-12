@@ -43,6 +43,14 @@ public class MainActivity extends Activity {
 	public static final String DEBUGLOG = TAG + "_DebugLog";
 	public static final String INGRESSVERSIONCODE = TAG + "_IngressVersionCode";
 
+	public static final int ACTIVATE_DEFAULT = ON_OFF.ON.ordinal();
+	public static final int CORRECTGLYPHS_DEFAULT = ON_OFF.ON.ordinal();
+	public static final int GLYPHKEY_DEFAULT = KEY.OFF.ordinal();
+	public static final int GLYPHSPEED_DEFAULT = SPEED.OFF.ordinal();
+	public static final int NORMALHACKKEY_DEFAULT = KEY.OFF.ordinal();
+	public static final int SOUND_DEFAULT = ON_OFF.ON.ordinal();
+	public static final int DEBUGLOG_DEFAULT = ON_OFF.OFF.ordinal();
+
 	public enum ON_OFF {OFF, ON}
 	public enum KEY {OFF, KEY, NOKEY}
 	public enum SPEED {OFF, FAST, SLOW}
@@ -94,7 +102,7 @@ public class MainActivity extends Activity {
 
 		showToast = false;
 
-		pref = getSharedPreferences(PREF, MODE_WORLD_READABLE);
+		pref = getSharedPreferences(PREF, MODE_PRIVATE);
 
 		description_module = (LinearLayout) findViewById(R.id.description_module);
 		description_glyphGame = (LinearLayout) findViewById(R.id.description_glyphGame);
@@ -207,13 +215,13 @@ public class MainActivity extends Activity {
 
 		showToast = false;
 
-		int prefActivate = pref.getInt(ACTIVATE, ON_OFF.ON.ordinal());
-		int prefCorrectGlyphs = pref.getInt(CORRECTGLYPHS, ON_OFF.ON.ordinal());
-		int prefGlyphKey = pref.getInt(GLYPHKEY, KEY.OFF.ordinal());
-		int prefGlyphSpeed = pref.getInt(GLYPHSPEED, SPEED.OFF.ordinal());
-		int prefNormalHack = pref.getInt(NORMALHACKKEY, KEY.OFF.ordinal());
-		int prefSound = pref.getInt(SOUND, ON_OFF.ON.ordinal());
-		int prefDebugLog = pref.getInt(DEBUGLOG, ON_OFF.OFF.ordinal());
+		int prefActivate = pref.getInt(ACTIVATE, ACTIVATE_DEFAULT);
+		int prefCorrectGlyphs = pref.getInt(CORRECTGLYPHS, CORRECTGLYPHS_DEFAULT);
+		int prefGlyphKey = pref.getInt(GLYPHKEY, GLYPHKEY_DEFAULT);
+		int prefGlyphSpeed = pref.getInt(GLYPHSPEED, GLYPHSPEED_DEFAULT);
+		int prefNormalHack = pref.getInt(NORMALHACKKEY, NORMALHACKKEY_DEFAULT);
+		int prefSound = pref.getInt(SOUND, SOUND_DEFAULT);
+		int prefDebugLog = pref.getInt(DEBUGLOG, DEBUGLOG_DEFAULT);
 
 		activate = ON_OFF.values()[prefActivate];
 		button_activate.setText(activateText[prefActivate]);
@@ -251,9 +259,9 @@ public class MainActivity extends Activity {
 
 		pref.edit().putInt(ACTIVATE, activate.ordinal()).apply();
 		pref.edit().putInt(CORRECTGLYPHS, correctGlyphs.ordinal()).apply();
-		pref.edit().putInt(NORMALHACKKEY, normalHack.ordinal()).apply();
 		pref.edit().putInt(GLYPHKEY, glyphKey.ordinal()).apply();
 		pref.edit().putInt(GLYPHSPEED, glyphSpeed.ordinal()).apply();
+		pref.edit().putInt(NORMALHACKKEY, normalHack.ordinal()).apply();
 		pref.edit().putInt(SOUND, sound.ordinal()).apply();
 		pref.edit().putInt(DEBUGLOG, debugLog.ordinal()).apply();
 
