@@ -32,7 +32,7 @@ public class Xglyph implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 	public static final String turingClassName = "com.nianticproject.ingress.common.utility.Turing";
 	public static final String turingClassMethodName1 = "g";
 	public static final String turingClassMethodName2 = "l";
-	public static String speedClassName = "o.nb"; // FIXME: this class name is for Ingress v1.108.1 - v1.121.0 and maybe future versions
+	public static String speedClassName = "o.nc"; // FIXME: this class name is for Ingress v1.122.0 and maybe future versions
 	public static String speedClassMethodName = "ˊ"; // FIXME: this method name is for Ingress v1.99.1 - v1.121.0 and maybe future versions
 
 	public static final String apmClassName = "android.app.ApplicationPackageManager";
@@ -88,6 +88,8 @@ public class Xglyph implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 				speedClassName = "o.mq"; // FIXME: this class name is for Ingress v1.99.1 - v1.104.1
 			} else if (ingressVersion < INGRESSVERSION20161102) {
 				speedClassName = "o.ms"; // FIXME: this class name is for Ingress v1.105.1 - v1.107.0
+			} else if (ingressVersion < INGRESSVERSION20170821) {
+				speedClassName = "o.nb"; // FIXME: this class name is for Ingress v1.107.0 - v1.121.0
 			}
 
 			final Class<?> portalHackingParamsClass;

@@ -9,7 +9,7 @@ public class NormalHackHook extends XC_MethodHook {
 
 	@Override
 	protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-		debugLog(portalHackingParamsClassName.substring(portalHackingParamsClassName.lastIndexOf(".") + 1) + ": constructor for normal hack called");
+		debugLog(portalHackingParamsClassName.substring(portalHackingParamsClassName.lastIndexOf(".") + 1) + ": constructor for hack called");
 
 		String arg0 = (String) param.args[0];
 		boolean glyphGameRequested = (boolean) param.args[1];

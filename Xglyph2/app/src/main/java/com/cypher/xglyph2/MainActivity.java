@@ -10,6 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ public class MainActivity extends Activity {
 	public static final String INGRESSPACKAGENAME = "com.nianticproject.ingress";
 	public static final int INGRESSVERSION20160802 = 11051;
 	public static final int INGRESSVERSION20161102 = 11081;
+	public static final int INGRESSVERSION20170821 = 11220;
 
 	public static final String PREF = TAG + "_Pref";
 	public static final String ACTIVATE = TAG + "_Activate";
@@ -102,7 +104,11 @@ public class MainActivity extends Activity {
 
 		showToast = false;
 
-		pref = getSharedPreferences(PREF, MODE_PRIVATE);
+		try {
+			pref = getSharedPreferences(PREF, MODE_WORLD_READABLE);
+		} catch (Exception e) {
+			pref = getSharedPreferences(PREF, MODE_PRIVATE);
+		}
 
 		description_module = (LinearLayout) findViewById(R.id.description_module);
 		description_glyphGame = (LinearLayout) findViewById(R.id.description_glyphGame);
@@ -174,16 +180,6 @@ public class MainActivity extends Activity {
 		TextView tv_credits = (TextView) findViewById(R.id.tv_credits);
 		tv_credits.setText(text);
 
-		try {
-			PackageInfo ingress = findPackage(INGRESSPACKAGENAME);
-			pref.edit().putInt(INGRESSVERSIONCODE, ingress.versionCode).apply();
-		} catch (AppNotInstalledException e) {
-			showDialog(
-					res.getString(R.string.warning_ingress_version_header),
-					res.getString(R.string.warning_ingress_version)
-			);
-		}
-
 		// first, check if self hooking works
 		if (!isXposedEnabled()) {
 			try {
@@ -204,6 +200,24 @@ public class MainActivity extends Activity {
 						res.getString(R.string.warning_xposed)
 				);
 			}
+		}
+
+		// check Android version
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+			showDialog(
+					res.getString(R.string.warning_android_version_header),
+					res.getString(R.string.warning_android_version)
+			);
+		}
+
+		try {
+			PackageInfo ingress = findPackage(INGRESSPACKAGENAME);
+			pref.edit().putInt(INGRESSVERSIONCODE, ingress.versionCode).apply();
+		} catch (AppNotInstalledException e) {
+			showDialog(
+					res.getString(R.string.warning_ingress_version_header),
+					res.getString(R.string.warning_ingress_version)
+			);
 		}
 
 		descriptionHint();
