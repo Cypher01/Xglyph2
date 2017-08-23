@@ -4,15 +4,16 @@ import de.robv.android.xposed.XC_MethodHook;
 
 import static com.cypher.xglyph2.MainActivity.*;
 import static com.cypher.xglyph2.Xglyph.*;
+import static com.cypher.xglyph2.Xglyph.TAG;
 
 public class GlyphSpeedHook extends XC_MethodHook {
 	@Override
 	protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable {
-		debugLog(speedClassName + "." + speedClassMethodName + " called");
+		log(TAG, speedClassName + "." + speedClassMethodName + " called");
 
 		String glyphString = (String) param.args[0];
 
-		debugLog("glyphString (param[0]): " + glyphString);
+		log(TAG, "glyphString (param[0]): " + glyphString);
 
 		glyphSpeedTriggered = true;
 
@@ -30,20 +31,20 @@ public class GlyphSpeedHook extends XC_MethodHook {
 			} else if (glyphString.equals(normalSpeedTrigger)) {
 				commandGlyphString = normalSpeedTrigger;
 				glyphSpeedTriggered = false;
-				debugLog("Glyph Hack normal speed set");
+				log(TAG, "Glyph Hack normal speed set");
 			}
 
 			if (commandGlyphString.equals("")) {
 				if (glyphSpeed == SPEED.FAST.ordinal()) {
 					param.args[0] = complexGlyph1;
-					debugLog("Glyph Hack fast set");
+					log(TAG, "Glyph Hack fast set");
 				} else if (glyphSpeed == SPEED.SLOW.ordinal()) {
 					param.args[0] = simpleGlyph1;
-					debugLog("Glyph Hack slow set");
+					log(TAG, "Glyph Hack slow set");
 				}
 			}
 		} else {
-			debugLog("Glyph Hack speed switched off");
+			log(TAG, "Glyph Hack speed switched off");
 		}
 	}
 }

@@ -10,6 +10,7 @@ import java.util.Random;
 
 import static com.cypher.xglyph2.MainActivity.*;
 import static com.cypher.xglyph2.Xglyph.*;
+import static com.cypher.xglyph2.Xglyph.TAG;
 import static de.robv.android.xposed.XposedHelpers.*;
 
 public class GlyphHackHook extends XC_MethodHook {
@@ -23,7 +24,7 @@ public class GlyphHackHook extends XC_MethodHook {
 
 	@Override
 	protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable {
-		debugLog(portalHackingParamsClassName.substring(portalHackingParamsClassName.lastIndexOf(".") + 1) + ": constructor for glyph hack called");
+		log(TAG, portalHackingParamsClassName.substring(portalHackingParamsClassName.lastIndexOf(".") + 1) + ": constructor for glyph hack called");
 
 		pref.reload();
 
@@ -39,11 +40,11 @@ public class GlyphHackHook extends XC_MethodHook {
 		if (param.args[1] != null) {
 			uigs1 = param.args[1].toString();
 
-			debugLog("original uigs1: " + uigs1);
+			log(TAG, "original uigs1: " + uigs1);
 
 			bypassed = getBooleanField(param.args[1], "bypassed");
 
-			debugLog("bypassed: " + bypassed);
+			log(TAG, "bypassed: " + bypassed);
 
 			if (!bypassed) {
 				if (correctGlyphs == ON_OFF.ON.ordinal()) {
@@ -55,18 +56,18 @@ public class GlyphHackHook extends XC_MethodHook {
 
 					long inputTimeMs = getLongField(param.args[1], "inputTimeMs");
 
-					debugLog("inputTimeMs = " + inputTimeMs);
+					log(TAG, "inputTimeMs = " + inputTimeMs);
 
 					Object uigs = newInstance(userInputGlyphSequenceClass, glyphList, false, inputTimeMs);
 					uigs1 = uigs.toString();
 
 					param.args[1] = uigs;
 				} else {
-					debugLog("Correct Glyphs switched off");
+					log(TAG, "Correct Glyphs switched off");
 				}
 			}
 		} else {
-			debugLog("original uigs1: " + uigs1 + " (else)");
+			log(TAG, "original uigs1: " + uigs1 + " (else)");
 		}
 
 		Object commandGlyphKey = null;
@@ -75,59 +76,59 @@ public class GlyphHackHook extends XC_MethodHook {
 		if (param.args[2] != null) {
 			uigs2 = param.args[2].toString();
 
-			debugLog("original uigs2: " + uigs2);
+			log(TAG, "original uigs2: " + uigs2);
 
 			bypassed = getBooleanField(param.args[2], "bypassed");
 
-			debugLog("bypassed: " + bypassed);
+			log(TAG, "bypassed: " + bypassed);
 
 			if (!bypassed) { // this should never happen, because param.args[2] is null in case of bypassed, but let's check it for the sake of completeness
 				List<String> glyphStringList = filterGlyphStrings(uigs2);
 
-				debugLog("command glyph inputs: " + glyphStringList);
+				log(TAG, "command glyph inputs: " + glyphStringList);
 
 				if (glyphStringList.contains(moreGlyph1) || glyphStringList.contains(moreGlyph2)) {
 					commandGlyphKey = newInstance(glyphClass, moreGlyph1);
-					debugLog("Glyph Hack key request set (overridden)");
+					log(TAG, "Glyph Hack key request set (overridden)");
 				} else if (glyphStringList.contains(lessGlyph1) || glyphStringList.contains(lessGlyph2)) {
 					commandGlyphKey = newInstance(glyphClass, lessGlyph1);
-					debugLog("Glyph Hack no key request set (overridden)");
+					log(TAG, "Glyph Hack no key request set (overridden)");
 				}
 
 				if (glyphStringList.contains(complexGlyph1) || glyphStringList.contains(complexGlyph2)) {
 					commandGlyphSpeed = newInstance(glyphClass, complexGlyph1);
-					debugLog("Glyph Hack fast set (overridden)");
+					log(TAG, "Glyph Hack fast set (overridden)");
 				} else if (glyphStringList.contains(simpleGlyph1) || glyphStringList.contains(simpleGlyph2)) {
 					commandGlyphSpeed = newInstance(glyphClass, simpleGlyph1);
-					debugLog("Glyph Hack slow set (overridden)");
+					log(TAG, "Glyph Hack slow set (overridden)");
 				}
 			}
 		} else {
-			debugLog("original uigs2: " + uigs2 + " (else)");
+			log(TAG, "original uigs2: " + uigs2 + " (else)");
 		}
 
 		if (!bypassed) {
 			if (commandGlyphKey == null) {
 				if (glyphKey == KEY.KEY.ordinal()) {
 					commandGlyphKey = newInstance(glyphClass, moreGlyph1);
-					debugLog("Glyph Hack key request set");
+					log(TAG, "Glyph Hack key request set");
 				} else if (glyphKey == KEY.NOKEY.ordinal()) {
 					commandGlyphKey = newInstance(glyphClass, lessGlyph1);
-					debugLog("Glyph Hack no key request set");
+					log(TAG, "Glyph Hack no key request set");
 				} else {
-					debugLog("Glyph Hack key switched off");
+					log(TAG, "Glyph Hack key switched off");
 				}
 			}
 
 			if (commandGlyphSpeed == null && glyphSpeedTriggered) {
 				if (glyphSpeed == SPEED.FAST.ordinal()) {
 					commandGlyphSpeed = newInstance(glyphClass, complexGlyph1);
-					debugLog("Glyph Hack fast set");
+					log(TAG, "Glyph Hack fast set");
 				} else if (glyphSpeed == SPEED.SLOW.ordinal()) {
 					commandGlyphSpeed = newInstance(glyphClass, simpleGlyph1);
-					debugLog("Glyph Hack slow set");
+					log(TAG, "Glyph Hack slow set");
 				} else {
-					debugLog("Glyph Hack speed switched off");
+					log(TAG, "Glyph Hack speed switched off");
 				}
 			}
 
@@ -168,8 +169,8 @@ public class GlyphHackHook extends XC_MethodHook {
 			}
 		}
 
-		debugLog("patched uigs1: " + uigs1);
-		debugLog("patched uigs2: " + uigs2);
+		log(TAG, "patched uigs1: " + uigs1);
+		log(TAG, "patched uigs2: " + uigs2);
 	}
 
 	private List<String> filterGlyphStrings(String sequence) {

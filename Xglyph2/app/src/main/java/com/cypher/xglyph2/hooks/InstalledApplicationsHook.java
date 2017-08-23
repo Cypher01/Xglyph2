@@ -12,7 +12,7 @@ import static com.cypher.xglyph2.Xglyph.*;
 public class InstalledApplicationsHook extends XC_MethodHook {
 	@Override
 	protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-		debugLog(apmClassName + "." + apmClassMethodName1 + " called");
+		log(TAG, apmClassName + "." + apmClassMethodName1 + " called");
 
 		List installedApplications = (List) param.getResult();
 

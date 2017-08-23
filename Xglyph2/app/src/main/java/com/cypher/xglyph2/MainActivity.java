@@ -1,6 +1,5 @@
 package com.cypher.xglyph2;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -12,6 +11,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 	public static final String TAG = "Xglyph2";
 
 	public static final String XPOSEDINSTALLERPACKAGENAME = "de.robv.android.xposed.installer";
@@ -43,6 +43,7 @@ public class MainActivity extends Activity {
 	public static final String NORMALHACKKEY = TAG + "_NormalHackKey";
 	public static final String SOUND = TAG + "_Sound";
 	public static final String DEBUGLOG = TAG + "_DebugLog";
+	public static final String LOGFILE = TAG + "_Logfile";
 	public static final String INGRESSVERSIONCODE = TAG + "_IngressVersionCode";
 
 	public static final int ACTIVATE_DEFAULT = ON_OFF.ON.ordinal();
@@ -51,7 +52,8 @@ public class MainActivity extends Activity {
 	public static final int GLYPHSPEED_DEFAULT = SPEED.OFF.ordinal();
 	public static final int NORMALHACKKEY_DEFAULT = KEY.OFF.ordinal();
 	public static final int SOUND_DEFAULT = ON_OFF.ON.ordinal();
-	public static final int DEBUGLOG_DEFAULT = ON_OFF.ON.ordinal();
+	public static final int DEBUGLOG_DEFAULT = ON_OFF.OFF.ordinal();
+	public static final int LOGFILE_DEFAULT = ON_OFF.OFF.ordinal();
 
 	public enum ON_OFF {OFF, ON}
 	public enum KEY {OFF, KEY, NOKEY}
@@ -64,6 +66,7 @@ public class MainActivity extends Activity {
 	private KEY normalHack;
 	private ON_OFF sound;
 	private ON_OFF debugLog;
+	private ON_OFF logfile;
 
 	private boolean showToast;
 
@@ -84,6 +87,7 @@ public class MainActivity extends Activity {
 	private Button button_normalHack;
 	private Button button_sound;
 	private Button button_debugLog;
+	private Button button_logfile;
 	private Button button_donate;
 	private MediaPlayer mp_startSound;
 	private MediaPlayer mp_buttonSound;
@@ -96,6 +100,7 @@ public class MainActivity extends Activity {
 	private String[] normalHackText;
 	private String[] soundText;
 	private String[] debugLogText;
+	private String[] logfileText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +114,8 @@ public class MainActivity extends Activity {
 		} catch (Exception e) {
 			pref = getSharedPreferences(PREF, MODE_PRIVATE);
 		}
+
+		res = getResources();
 
 		description_module = (LinearLayout) findViewById(R.id.description_module);
 		description_glyphGame = (LinearLayout) findViewById(R.id.description_glyphGame);
@@ -124,13 +131,12 @@ public class MainActivity extends Activity {
 		button_normalHack = (Button) findViewById(R.id.button_normalHack);
 		button_sound = (Button) findViewById(R.id.button_sound);
 		button_debugLog = (Button) findViewById(R.id.button_debugLog);
+		button_logfile = (Button) findViewById(R.id.button_logfile);
 		button_donate = (Button) findViewById(R.id.button_donate);
 
 		mp_startSound = MediaPlayer.create(this, R.raw.sfx_glyphgame_score_positive);
 		mp_buttonSound = MediaPlayer.create(this, R.raw.sfx_ui_success);
 		mp_exitSound =  MediaPlayer.create(this, R.raw.sfx_ui_back);
-
-		res = getResources();
 
 		activateText = new String[] {
 				res.getString(R.string.activate_off),
@@ -168,6 +174,11 @@ public class MainActivity extends Activity {
 		debugLogText = new String[] {
 				res.getString(R.string.debug_log_off),
 				res.getString(R.string.debug_log_on)
+		};
+
+		logfileText = new String[] {
+				res.getString(R.string.logfile_off),
+				res.getString(R.string.logfile_on)
 		};
 
 		setListeners();
@@ -210,6 +221,7 @@ public class MainActivity extends Activity {
 			);
 		}
 
+		// check Ingress version
 		try {
 			PackageInfo ingress = findPackage(INGRESSPACKAGENAME);
 			pref.edit().putInt(INGRESSVERSIONCODE, ingress.versionCode).apply();
@@ -236,6 +248,7 @@ public class MainActivity extends Activity {
 		int prefNormalHack = pref.getInt(NORMALHACKKEY, NORMALHACKKEY_DEFAULT);
 		int prefSound = pref.getInt(SOUND, SOUND_DEFAULT);
 		int prefDebugLog = pref.getInt(DEBUGLOG, DEBUGLOG_DEFAULT);
+		int prefLogfile = pref.getInt(LOGFILE, LOGFILE_DEFAULT);
 
 		activate = ON_OFF.values()[prefActivate];
 		button_activate.setText(activateText[prefActivate]);
@@ -260,6 +273,9 @@ public class MainActivity extends Activity {
 		debugLog = ON_OFF.values()[prefDebugLog];
 		button_debugLog.setText(debugLogText[prefDebugLog]);
 
+		logfile = ON_OFF.values()[prefLogfile];
+		button_logfile.setText(logfileText[prefLogfile]);
+
 		showToast = true;
 
 		startSound();
@@ -278,6 +294,7 @@ public class MainActivity extends Activity {
 		pref.edit().putInt(NORMALHACKKEY, normalHack.ordinal()).apply();
 		pref.edit().putInt(SOUND, sound.ordinal()).apply();
 		pref.edit().putInt(DEBUGLOG, debugLog.ordinal()).apply();
+		pref.edit().putInt(LOGFILE, logfile.ordinal()).apply();
 
 		exitSound();
 
@@ -356,6 +373,16 @@ public class MainActivity extends Activity {
 			public void onClick(View view) {
 				debugLog = ON_OFF.values()[(debugLog.ordinal() + 1) % ON_OFF.values().length];
 				button_debugLog.setText(debugLogText[debugLog.ordinal()]);
+
+				buttonSound();
+			}
+		});
+
+		button_logfile.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				logfile = ON_OFF.values()[(logfile.ordinal() + 1) % ON_OFF.values().length];
+				button_logfile.setText(logfileText[logfile.ordinal()]);
 
 				buttonSound();
 			}

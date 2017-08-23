@@ -8,8 +8,7 @@ import static com.cypher.xglyph2.Xglyph.*;
 public class ClearGlyphsHook extends XC_MethodHook {
 	@Override
 	protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-		debugLog(turingClassName + "." + turingClassMethodName2 + " called");
-
+		log(TAG, turingClassName + "." + turingClassMethodName2 + " called");
 		GlyphTranslator.sequence.clear();
 	}
 }

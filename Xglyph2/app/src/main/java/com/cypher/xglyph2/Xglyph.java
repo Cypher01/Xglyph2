@@ -1,20 +1,30 @@
 package com.cypher.xglyph2;
 
+import android.os.Environment;
+import android.util.Log;
 import com.cypher.xglyph2.hooks.*;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import static com.cypher.xglyph2.MainActivity.*;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.*;
+import static de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class Xglyph implements IXposedHookLoadPackage, IXposedHookZygoteInit {
-	public static final String TAG = Xglyph.class.getSimpleName() + ": ";
+	public static final String TAG = "Xglyph²";
 
 	public static final XSharedPreferences pref = new XSharedPreferences(Xglyph.class.getPackage().getName(), PREF);
+	private static final String logfileFolder = "Xglyph2";
+	private static String logfile = "";
 
 	public static final String moreGlyph1 = "ikj";
 	public static final String moreGlyph2 = "jki";
@@ -33,7 +43,7 @@ public class Xglyph implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 	public static final String turingClassMethodName1 = "g";
 	public static final String turingClassMethodName2 = "l";
 	public static String speedClassName = "o.nc"; // FIXME: this class name is for Ingress v1.122.0 and maybe future versions
-	public static String speedClassMethodName = "ˊ"; // FIXME: this method name is for Ingress v1.99.1 - v1.121.0 and maybe future versions
+	public static String speedClassMethodName = "ˊ"; // FIXME: this method name is for Ingress v1.99.1 - v1.122.0 and maybe future versions
 
 	public static final String apmClassName = "android.app.ApplicationPackageManager";
 	public static final String apmClassMethodName1 = "getInstalledApplications";
@@ -46,43 +56,47 @@ public class Xglyph implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 		boolean worldReadable = pref.makeWorldReadable();
 
 		if (worldReadable) {
-			debugLog("Preferences set world readable");
+			de.robv.android.xposed.XposedBridge.log(TAG + ": Preferences set world readable");
 		} else {
-			debugLog("Preferences set world readable FAILED");
-		}
-	}
-
-	public static void debugLog(String message) {
-		pref.reload();
-
-		if (pref.getInt(DEBUGLOG, ON_OFF.ON.ordinal()) == ON_OFF.ON.ordinal()) {
-			log(TAG + "[DEBUG] " + message);
+			de.robv.android.xposed.XposedBridge.log(TAG + ": Preferences set world readable FAILED");
 		}
 	}
 
 	@Override
-	public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
+		// ================================================================================
+		// ==== Xglyph² (self hooking, check if module is activated) ======================
+		// ================================================================================
 		if (lpparam.packageName.equals(BuildConfig.APPLICATION_ID)) {
-			findAndHookMethod("com.cypher.xglyph2.MainActivity", lpparam.classLoader, "isXposedEnabled", new XC_MethodHook() {
-				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-					param.setResult(true);
-				}
-			});
+			try {
+				findAndHookMethod("com.cypher.xglyph2.MainActivity", lpparam.classLoader, "isXposedEnabled", new XC_MethodHook() {
+					@Override
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+						param.setResult(true);
+					}
+				});
+			} catch (ClassNotFoundError | NoSuchMethodError ignored) { }
 
 			return;
 		}
 
+		// ================================================================================
+		// ==== Ingress ===================================================================
+		// ================================================================================
 		if (!lpparam.packageName.equals(INGRESSPACKAGENAME)) {
 			return;
 		}
 
-		debugLog("Ingress loaded");
+		if (logfile.equals("")) {
+			logfile = "Xglyph2_" + getDateAndTimeStringFilename() + ".txt";
+		}
+
+		log(TAG, "Ingress loaded");
 
 		pref.reload();
 
 		if (pref.getInt(ACTIVATE, ON_OFF.ON.ordinal()) == ON_OFF.ON.ordinal()) {
-			int ingressVersion = pref.getInt(INGRESSVERSIONCODE, INGRESSVERSION20161102);
+			int ingressVersion = pref.getInt(INGRESSVERSIONCODE, INGRESSVERSION20170821);
 
 			if (ingressVersion < INGRESSVERSION20160802) {
 				speedClassName = "o.mq"; // FIXME: this class name is for Ingress v1.99.1 - v1.104.1
@@ -101,92 +115,166 @@ public class Xglyph implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 			try {
 				portalHackingParamsClass = findClass(portalHackingParamsClassName, lpparam.classLoader);
 			} catch (ClassNotFoundError e) {
-				log(TAG + portalHackingParamsClassName + ": class not found");
+				log(TAG, portalHackingParamsClassName + ": class not found", true);
 				return;
 			}
 
 			try {
 				userInputGlyphSequenceClass = findClass(userInputGlyphSequenceClassName, lpparam.classLoader);
 			} catch (ClassNotFoundError e) {
-				log(TAG + userInputGlyphSequenceClassName + ": class not found");
+				log(TAG, userInputGlyphSequenceClassName + ": class not found", true);
 				return;
 			}
 
 			try {
-				glyphClass = findClass(Xglyph.glyphClassName, lpparam.classLoader);
+				glyphClass = findClass(glyphClassName, lpparam.classLoader);
 			} catch (ClassNotFoundError e) {
-				log(TAG + glyphClassName + ": class not found");
+				log(TAG, glyphClassName + ": class not found", true);
 				return;
 			}
 
 			try {
 				turingClass = findClass(turingClassName, lpparam.classLoader);
 			} catch (ClassNotFoundError e) {
-				log(TAG + turingClassName + ": class not found");
+				log(TAG, turingClassName + ": class not found", true);
 				return;
 			}
 
 			try {
 				speedClass = findClass(speedClassName, lpparam.classLoader);
 			} catch (ClassNotFoundError e) {
-				log(TAG + speedClassName + ": class not found");
+				log(TAG, speedClassName + ": class not found", true);
 				return;
 			}
 
 			try {
 				findAndHookConstructor(portalHackingParamsClass, String.class, boolean.class, boolean.class, new NormalHackHook());
 			} catch (NoSuchMethodError e) {
-				log(TAG + portalHackingParamsClassName + ": constructor for normal hack not found");
+				log(TAG, portalHackingParamsClassName + ": constructor for normal hack not found", true);
 			}
 
 			try {
 				findAndHookConstructor(portalHackingParamsClass, String.class, userInputGlyphSequenceClass, userInputGlyphSequenceClass, new GlyphHackHook(glyphClass, userInputGlyphSequenceClass));
 			} catch (NoSuchMethodError e) {
-				log(TAG + portalHackingParamsClassName + ": constructor for glyph hack not found");
+				log(TAG, portalHackingParamsClassName + ": constructor for glyph hack not found", true);
 			}
 
 			try {
 				findAndHookMethod(turingClass, turingClassMethodName1, String.class, new TranslateGlyphsHook());
 			} catch (NoSuchMethodError error) {
-				log(TAG + turingClassName + "." + turingClassMethodName1 + ": method not found");
+				log(TAG, turingClassName + "." + turingClassMethodName1 + ": method not found", true);
 			}
 
 			try {
 				findAndHookMethod(turingClass, turingClassMethodName2, new ClearGlyphsHook());
 			} catch (NoSuchMethodError error) {
-				log(TAG + turingClassName + "." + turingClassMethodName2 + ": method not found");
+				log(TAG, turingClassName + "." + turingClassMethodName2 + ": method not found", true);
 			}
 
 			try {
 				findAndHookMethod(speedClass, speedClassMethodName, String.class, new GlyphSpeedHook());
 			} catch (NoSuchMethodError error) {
-				log(TAG + speedClassName + "." + speedClassMethodName + ": method not found");
+				log(TAG, speedClassName + "." + speedClassMethodName + ": method not found", true);
 			}
 		} else {
-			debugLog("Xglyph switched off");
+			log(TAG, "Xglyph² switched off", true);
 		}
 
-// ============================== HideX ==============================
-
+		// ================================================================================
+		// ==== Xglyph² (self hiding, prevent Ingress from detecting the module) ==========
+		// ================================================================================
 		final Class<?> apmClass;
 
 		try {
 			apmClass = findClass(apmClassName, lpparam.classLoader);
 		} catch (ClassNotFoundError e) {
-			log(TAG + apmClassName + ": class not found");
+			log(TAG, apmClassName + ": class not found", true);
 			return;
 		}
 
 		try {
 			findAndHookMethod(apmClass, apmClassMethodName1, int.class, new InstalledApplicationsHook());
 		} catch (NoSuchMethodError error) {
-			log(TAG + apmClassName + "." + apmClassMethodName1 + ": method not found");
+			log(TAG, apmClassName + "." + apmClassMethodName1 + ": method not found", true);
 		}
 
 		try {
 			findAndHookMethod(apmClass, apmClassMethodName2, int.class, new InstalledPackagesHook());
 		} catch (NoSuchMethodError error) {
-			log(TAG + apmClassName + "." + apmClassMethodName2 + ": method not found");
+			log(TAG, apmClassName + "." + apmClassMethodName2 + ": method not found", true);
 		}
+	}
+
+	public static void log(String TAG, String text) {
+		log(TAG, text, false);
+	}
+
+	public static void log(String TAG, String text, boolean overrideDebugLogConfig) {
+		pref.reload();
+
+		if (pref.getInt(DEBUGLOG, DEBUGLOG_DEFAULT) == ON_OFF.ON.ordinal() || overrideDebugLogConfig) {
+			de.robv.android.xposed.XposedBridge.log(TAG + ": " + text);
+		}
+
+		if (pref.getInt(LOGFILE, LOGFILE_DEFAULT) == ON_OFF.ON.ordinal()) {
+			try {
+				writeToFile(logfileFolder, logfile, text);
+			} catch (IOException e) {
+				de.robv.android.xposed.XposedBridge.log(TAG + ": Write log file FAILED");
+				Log.d(TAG, "Write log file FAILED");
+			}
+		}
+	}
+
+	private static synchronized void writeToFile(String foldername, String filename, String content) throws IOException {
+		File storageFile = getOrCreateFile(foldername, filename);
+		FileWriter fileWriter = new FileWriter(storageFile, true);
+		fileWriter.write(getDateAndTimeStringLogfile() + ": " + content + "\n");
+		fileWriter.flush();
+		fileWriter.close();
+	}
+
+	private static synchronized File getOrCreateFile(String foldername, String filename) throws IOException {
+		File file = new File(Environment.getExternalStorageDirectory(), foldername);
+
+		if (!file.exists()) {
+			if (!file.mkdir()) {
+				throw new IOException("Couldn't create folder " + file.getAbsolutePath());
+			}
+		} else if (file.isFile()) {
+			throw new IOException("File with considered foldername " + file.getAbsolutePath() + " exists");
+		}
+
+		file = new File(file, filename);
+
+		if (!file.exists()) {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+			String buildDate = dateFormat.format(new java.util.Date(BuildConfig.TIMESTAMP));
+
+			String content = "Xglyph² v" + BuildConfig.VERSION_NAME + ", " + buildDate + "\n\n";
+
+			FileWriter fileWriter = new FileWriter(file, true);
+			fileWriter.write(content);
+			fileWriter.flush();
+			fileWriter.close();
+		}
+
+		return file;
+	}
+
+	private static String getDateAndTimeStringFilename() {
+		Date now = new Date();
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.US);
+
+		return dateFormat.format(now);
+	}
+
+	private static String getDateAndTimeStringLogfile() {
+		Date now = new Date();
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd, HH:mm:ss", Locale.US);
+
+		return dateFormat.format(now);
 	}
 }

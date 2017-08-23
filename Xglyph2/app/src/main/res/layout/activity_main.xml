@@ -342,6 +342,31 @@
 
 				</LinearLayout>
 
+				<LinearLayout
+					style="@style/SectionBodyStyle">
+
+					<LinearLayout
+						style="@style/SectionBodySplitStyle">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/logfile_label"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						style="@style/SectionBodySplitStyle">
+
+						<Button
+							style="@style/ButtonStyle"
+							android:text="@string/logfile_off"
+							android:id="@+id/button_logfile"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
 			</LinearLayout>
 
 			<LinearLayout
