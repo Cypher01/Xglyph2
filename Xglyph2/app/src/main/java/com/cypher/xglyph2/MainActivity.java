@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -109,12 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
 		showToast = false;
 
-		try {
-			pref = getSharedPreferences(PREF, MODE_WORLD_READABLE);
-		} catch (Exception e) {
-			pref = getSharedPreferences(PREF, MODE_PRIVATE);
-		}
-
+		pref = getSharedPreferences(PREF, MODE_PRIVATE);
 		res = getResources();
 
 		description_module = (LinearLayout) findViewById(R.id.description_module);
@@ -287,6 +284,8 @@ public class MainActivity extends AppCompatActivity {
 
 		showToast = false;
 
+		exitSound();
+
 		pref.edit().putInt(ACTIVATE, activate.ordinal()).apply();
 		pref.edit().putInt(CORRECTGLYPHS, correctGlyphs.ordinal()).apply();
 		pref.edit().putInt(GLYPHKEY, glyphKey.ordinal()).apply();
@@ -296,9 +295,51 @@ public class MainActivity extends AppCompatActivity {
 		pref.edit().putInt(DEBUGLOG, debugLog.ordinal()).apply();
 		pref.edit().putInt(LOGFILE, logfile.ordinal()).apply();
 
-		exitSound();
+		pref.edit().commit();
+
+		fixPermissions();
 
 		showToast = true;
+	}
+
+	private void fixPermissions() {
+		File sharedPrefsFolder = new File(this.getApplicationInfo().dataDir + "/shared_prefs");
+
+		Log.d(TAG, "sharedPrefsFolder: " + sharedPrefsFolder.toString());
+
+		boolean folderPermissionsDone = false;
+		boolean filePermissionsDone = false;
+
+		boolean folderExecutable = false;
+		boolean folderReadable = false;
+		boolean fileReadable = false;
+
+		if (sharedPrefsFolder.exists()) {
+			folderExecutable = sharedPrefsFolder.setExecutable(true, false);
+			folderReadable = sharedPrefsFolder.setReadable(true, false);
+
+			File prefFile = new File(sharedPrefsFolder.getAbsolutePath() + "/" + PREF + ".xml");
+
+			folderPermissionsDone = true;
+
+			if (prefFile.exists()) {
+				fileReadable = prefFile.setReadable(true, false);
+
+				filePermissionsDone = true;
+			}
+		}
+
+		if (folderPermissionsDone && !folderExecutable) {
+			Log.e(TAG, "folder set executable FAILED");
+		}
+
+		if (folderPermissionsDone && !folderReadable) {
+			Log.e(TAG, "folder set readable FAILED");
+		}
+
+		if (filePermissionsDone && !fileReadable) {
+			Log.e(TAG, "file set readable FAILED");
+		}
 	}
 
 	private void setListeners() {

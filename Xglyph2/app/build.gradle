@@ -8,8 +8,8 @@ android {
 		applicationId "com.cypher.xglyph2"
 		minSdkVersion 14
 		targetSdkVersion 25
-		versionCode 9
-		versionName "1.4.4"
+		versionCode 10
+		versionName "1.5"
 
 		buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 	}

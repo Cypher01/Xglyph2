@@ -4,7 +4,6 @@ import android.os.Environment;
 import android.util.Log;
 import com.cypher.xglyph2.hooks.*;
 import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 
@@ -19,7 +18,7 @@ import static com.cypher.xglyph2.MainActivity.*;
 import static de.robv.android.xposed.XposedHelpers.*;
 import static de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public class Xglyph implements IXposedHookLoadPackage, IXposedHookZygoteInit {
+public class Xglyph implements IXposedHookLoadPackage {
 	public static final String TAG = "Xglyph²";
 
 	public static final XSharedPreferences pref = new XSharedPreferences(Xglyph.class.getPackage().getName(), PREF);
@@ -50,17 +49,6 @@ public class Xglyph implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 	public static final String apmClassMethodName2 = "getInstalledPackages";
 
 	public static boolean glyphSpeedTriggered = false;
-
-	@Override
-	public void initZygote(StartupParam startupParam) throws Throwable {
-		boolean worldReadable = pref.makeWorldReadable();
-
-		if (worldReadable) {
-			de.robv.android.xposed.XposedBridge.log(TAG + ": Preferences set world readable");
-		} else {
-			de.robv.android.xposed.XposedBridge.log(TAG + ": Preferences set world readable FAILED");
-		}
-	}
 
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
