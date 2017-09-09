@@ -16,10 +16,12 @@ import static de.robv.android.xposed.XposedHelpers.*;
 public class GlyphHackHook extends XC_MethodHook {
 	private final Class<?> glyphClass;
 	private final Class<?> userInputGlyphSequenceClass;
+	private final Random rand;
 
 	public GlyphHackHook(Class<?> glyphClass, Class<?> userInputGlyphSequenceClass) throws XposedHelpers.ClassNotFoundError {
 		this.glyphClass = glyphClass;
 		this.userInputGlyphSequenceClass = userInputGlyphSequenceClass;
+		this.rand = new Random();
 	}
 
 	@Override
@@ -28,25 +30,27 @@ public class GlyphHackHook extends XC_MethodHook {
 
 		pref.reload();
 
-		int correctGlyphs = pref.getInt(CORRECTGLYPHS, ON_OFF.ON.ordinal());
-		int glyphKey = pref.getInt(GLYPHKEY, KEY.OFF.ordinal());
-		int glyphSpeed = pref.getInt(GLYPHSPEED, SPEED.OFF.ordinal());
+		int correctGlyphs = pref.getInt(CORRECTGLYPHS, CORRECTGLYPHS_DEFAULT);
+		int glyphKey = pref.getInt(GLYPHKEY, GLYPHKEY_DEFAULT);
+		int glyphSpeed = pref.getInt(GLYPHSPEED, GLYPHSPEED_DEFAULT);
+		int bypass = pref.getInt(BYPASS, BYPASS_DEFAULT);
 
 		String uigs1 = "null";
 		String uigs2 = "null";
 
-		boolean bypassed = false;
+		boolean bypassed_uigs1 = false;
+		boolean bypassed_uigs2 = false;
 
 		if (param.args[1] != null) {
 			uigs1 = param.args[1].toString();
 
 			log(TAG, "original uigs1: " + uigs1);
 
-			bypassed = getBooleanField(param.args[1], "bypassed");
+			bypassed_uigs1 = getBooleanField(param.args[1], "bypassed");
 
-			log(TAG, "bypassed: " + bypassed);
+			log(TAG, "bypassed: " + bypassed_uigs1);
 
-			if (!bypassed) {
+			if (!bypassed_uigs1 || bypass == ON_OFF.ON.ordinal()) {
 				if (correctGlyphs == ON_OFF.ON.ordinal()) {
 					List<Object> glyphList = new ArrayList<>();
 
@@ -54,9 +58,24 @@ public class GlyphHackHook extends XC_MethodHook {
 						glyphList.add(newInstance(glyphClass, GlyphTranslator.sequence.get(i)));
 					}
 
-					long inputTimeMs = getLongField(param.args[1], "inputTimeMs");
+					long inputTimeMs;
 
-					log(TAG, "inputTimeMs = " + inputTimeMs);
+					if (bypassed_uigs1 && bypass == ON_OFF.ON.ordinal()) {
+						log(TAG, "bypass hooked");
+
+						inputTimeMs = calculateInputTime();
+
+						log(TAG, "inputTimeMs set to " + inputTimeMs);
+
+						if (inputTimeMs == -1L) {
+							// bypass has been hit too early
+							return;
+						}
+					} else {
+						inputTimeMs = getLongField(param.args[1], "inputTimeMs");
+
+						log(TAG, "inputTimeMs = " + inputTimeMs);
+					}
 
 					Object uigs = newInstance(userInputGlyphSequenceClass, glyphList, false, inputTimeMs);
 					uigs1 = uigs.toString();
@@ -78,11 +97,11 @@ public class GlyphHackHook extends XC_MethodHook {
 
 			log(TAG, "original uigs2: " + uigs2);
 
-			bypassed = getBooleanField(param.args[2], "bypassed");
+			bypassed_uigs2 = getBooleanField(param.args[2], "bypassed");
 
-			log(TAG, "bypassed: " + bypassed);
+			log(TAG, "bypassed: " + bypassed_uigs2);
 
-			if (!bypassed) { // this should never happen, because param.args[2] is null in case of bypassed, but let's check it for the sake of completeness
+			if (!bypassed_uigs2) { // this should never happen, because param.args[2] is null in case of bypassed, but let's check it for the sake of completeness
 				List<String> glyphStringList = filterGlyphStrings(uigs2);
 
 				log(TAG, "command glyph inputs: " + glyphStringList);
@@ -107,7 +126,11 @@ public class GlyphHackHook extends XC_MethodHook {
 			log(TAG, "original uigs2: " + uigs2 + " (else)");
 		}
 
-		if (!bypassed) {
+		if (bypass == ON_OFF.ON.ordinal()) {
+			glyphSpeedTriggered = true;
+		}
+
+		if (!bypassed_uigs1 && !bypassed_uigs2 || bypass == ON_OFF.ON.ordinal()) {
 			if (commandGlyphKey == null) {
 				if (glyphKey == KEY.KEY.ordinal()) {
 					commandGlyphKey = newInstance(glyphClass, moreGlyph1);
@@ -159,7 +182,6 @@ public class GlyphHackHook extends XC_MethodHook {
 					glyphSpeedTriggered = false;
 				}
 
-				Random rand = new Random();
 				long randomNum = (long) rand.nextInt((max - min) + 1) + min;
 
 				Object uigs = newInstance(userInputGlyphSequenceClass, glyphList, false, randomNum);
@@ -190,5 +212,42 @@ public class GlyphHackHook extends XC_MethodHook {
 		}
 
 		return glyphStringList;
+	}
+
+	private long calculateInputTime() {
+		double min = (double) pref.getInt(SPEEDBONUSMIN, SPEEDBONUSMIN_DEFAULT);
+		double max = (double) pref.getInt(SPEEDBONUSMAX, SPEEDBONUSMAX_DEFAULT);
+		int numGlyphs = GlyphTranslator.sequence.size();
+		double timeLimit;
+
+		// portal level    #glyphs    time limit
+		//       1            1           20
+		//       2            2           20
+		//       3            3           20
+		//       4            3           19
+		//       5            3           18
+		//       6            4           17
+		//       7            4           16
+		//       8            5           15
+
+		// TODO: involve also the portal level, these values are only lower limits calculated from #glyphs
+		if (numGlyphs == 0) {
+			// bypass has been hit too early
+			return -1L;
+		} else if (numGlyphs <= 2) {
+			timeLimit = 20d;
+		} else if (numGlyphs == 3) {
+			timeLimit = 18d;
+		} else if (numGlyphs == 4) {
+			timeLimit = 16d;
+		} else if (numGlyphs == 5) {
+			timeLimit = 15d;
+		} else {
+			return -1L; // this should never happen, 5 glyphs are max
+		}
+
+		double speedBonus = (max - min) * rand.nextDouble() + min;
+
+		return (long) ((timeLimit * 1000d) - (speedBonus * timeLimit * 10d));
 	}
 }

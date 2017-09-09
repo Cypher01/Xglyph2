@@ -20,7 +20,7 @@ public class NormalHackHook extends XC_MethodHook {
 		if (!glyphGameRequested) {
 			pref.reload();
 
-			int normalHackKey = pref.getInt(NORMALHACKKEY, KEY.OFF.ordinal());
+			int normalHackKey = pref.getInt(NORMALHACKKEY, NORMALHACKKEY_DEFAULT);
 
 			if (normalHackKey == KEY.KEY.ordinal()) {
 				param.args[2] = false;

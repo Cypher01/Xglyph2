@@ -76,14 +76,14 @@ public class Xglyph implements IXposedHookLoadPackage {
 		}
 
 		if (logfile.equals("")) {
-			logfile = "Xglyph2_" + getDateAndTimeStringFilename() + ".txt";
+			logfile = "Xglyph2_" + getDateAndTime(true) + ".txt";
 		}
-
-		log(TAG, "Ingress loaded");
 
 		pref.reload();
 
-		if (pref.getInt(ACTIVATE, ON_OFF.ON.ordinal()) == ON_OFF.ON.ordinal()) {
+		log(TAG, "Ingress loaded");
+
+		if (pref.getInt(ACTIVATE, ACTIVATE_DEFAULT) == ON_OFF.ON.ordinal()) {
 			int ingressVersion = pref.getInt(INGRESSVERSIONCODE, INGRESSVERSION20170821);
 
 			if (ingressVersion < INGRESSVERSION20160802) {
@@ -197,10 +197,10 @@ public class Xglyph implements IXposedHookLoadPackage {
 		log(TAG, text, false);
 	}
 
-	public static void log(String TAG, String text, boolean overrideDebugLogConfig) {
+	public static void log(String TAG, String text, boolean forceLog) {
 		pref.reload();
 
-		if (pref.getInt(DEBUGLOG, DEBUGLOG_DEFAULT) == ON_OFF.ON.ordinal() || overrideDebugLogConfig) {
+		if (pref.getInt(DEBUGLOG, DEBUGLOG_DEFAULT) == ON_OFF.ON.ordinal() || forceLog) {
 			de.robv.android.xposed.XposedBridge.log(TAG + ": " + text);
 		}
 
@@ -209,7 +209,7 @@ public class Xglyph implements IXposedHookLoadPackage {
 				writeToFile(logfileFolder, logfile, text);
 			} catch (IOException e) {
 				de.robv.android.xposed.XposedBridge.log(TAG + ": Write log file FAILED");
-				Log.d(TAG, "Write log file FAILED");
+				Log.e(TAG, "Write log file FAILED");
 			}
 		}
 	}
@@ -217,7 +217,7 @@ public class Xglyph implements IXposedHookLoadPackage {
 	private static synchronized void writeToFile(String foldername, String filename, String content) throws IOException {
 		File storageFile = getOrCreateFile(foldername, filename);
 		FileWriter fileWriter = new FileWriter(storageFile, true);
-		fileWriter.write(getDateAndTimeStringLogfile() + ": " + content + "\n");
+		fileWriter.write(getDateAndTime(false) + ": " + content + "\n");
 		fileWriter.flush();
 		fileWriter.close();
 	}
@@ -250,18 +250,16 @@ public class Xglyph implements IXposedHookLoadPackage {
 		return file;
 	}
 
-	private static String getDateAndTimeStringFilename() {
+	private static String getDateAndTime(boolean filename) {
 		Date now = new Date();
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.US);
+		SimpleDateFormat dateFormat;
 
-		return dateFormat.format(now);
-	}
-
-	private static String getDateAndTimeStringLogfile() {
-		Date now = new Date();
-
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd, HH:mm:ss", Locale.US);
+		if (filename) {
+			dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.US);
+		} else {
+			dateFormat = new SimpleDateFormat("yyyy-MM-dd, HH:mm:ss", Locale.US);
+		}
 
 		return dateFormat.format(now);
 	}

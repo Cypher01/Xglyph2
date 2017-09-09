@@ -29,6 +29,11 @@
 	<string name="description_normal_hack_nokey_header">Normal Hack No Key</string>
 	<string name="description_normal_hack_nokey">Hack no key, even when using the Hack option in the circle menu or the Hack button in the portal dialog.</string>
 
+	<string name="description_ugly_cheats_bypass_header">Bypass</string>
+	<string name="description_ugly_cheats_bypass">Send correct glyphs, even when tapping bypass. If you tap bypass too early, particularly when the glyphs aren\'t loaded yet, the glyph game will be bypassed as usual.\n\nTHIS IS A VERY UGLY CHEAT, DON\'T USE THIS PERMANENTLY!</string>
+	<string name="description_ugly_cheats_speed_bonus_header">Speed Bonus</string>
+	<string name="description_ugly_cheats_speed_bonus">Configure the speed bonus you get when hitting bypass. This doesn\'t affect the speed bonus when playing the glyph game normal.</string>
+
 	<string name="description_command_channel_key_header">Glyph Hack Key</string>
 	<string name="description_command_channel_key">Automatically send a \'MORE\' glyph to request a key, even when you don\'t touch the command glyph or draw bullshit.</string>
 	<string name="description_command_channel_nokey_header">Glyph Hack No Key</string>
@@ -63,6 +68,10 @@
 	<string name="glyph_speed_label">COMPLEX/SIMPLE</string>
 	<string name="normal_hack_label">Normal hack</string>
 	<string name="normal_hack_description">Always hack (no) key</string>
+	<string name="ungly_cheats_label">Ugly cheats</string>
+	<string name="ungly_cheats_description">Even more cheaty stuff</string>
+	<string name="bypass_label">Bypass</string>
+	<string name="speed_bonus_label">Speed bonus in %</string>
 	<string name="misc_label">Misc</string>
 	<string name="misc_description">Miscellaneous configs</string>
 	<string name="sound_label">Sound</string>
@@ -88,6 +97,8 @@
 	<string name="normal_hack_off">Off</string>
 	<string name="normal_hack_key">Key</string>
 	<string name="normal_hack_no_key">No Key</string>
+	<string name="bypass_off">Off</string>
+	<string name="bypass_on">On</string>
 	<string name="sound_off">Off</string>
 	<string name="sound_on">On</string>
 	<string name="debug_log_off">Off</string>

@@ -19,7 +19,7 @@ public class GlyphSpeedHook extends XC_MethodHook {
 
 		pref.reload();
 
-		int glyphSpeed = pref.getInt(GLYPHSPEED, SPEED.OFF.ordinal());
+		int glyphSpeed = pref.getInt(GLYPHSPEED, GLYPHSPEED_DEFAULT);
 
 		if (glyphSpeed != SPEED.OFF.ordinal()) {
 			String commandGlyphString = "";

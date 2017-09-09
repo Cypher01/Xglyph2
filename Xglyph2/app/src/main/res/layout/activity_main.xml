@@ -2,6 +2,7 @@
 
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:rsb="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -260,6 +261,93 @@
 							style="@style/ButtonStyle"
 							android:text="@string/normal_hack_off"
 							android:id="@+id/button_normalHack"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
+				style="@style/SectionStyle"
+				android:id="@+id/ll_uglyCheats">
+
+				<LinearLayout
+					style="@style/SectionHeaderStyle">
+
+					<LinearLayout
+						style="@style/SectionTitleStyle"
+						android:id="@+id/description_unglyCheats">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/ungly_cheats_label"/>
+
+					</LinearLayout>
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginLeft="@dimen/gap_margin"
+						android:text="@string/ungly_cheats_description"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					style="@style/SectionBodyStyle">
+
+					<LinearLayout
+						style="@style/SectionBodySplitStyle">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/bypass_label"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						style="@style/SectionBodySplitStyle">
+
+						<Button
+							style="@style/ButtonStyle"
+							android:text="@string/bypass_off"
+							android:id="@+id/button_bypass"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+				<LinearLayout
+					style="@style/SectionBodyStyle">
+
+					<LinearLayout
+						style="@style/SectionBodySplitStyle">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/speed_bonus_label"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						style="@style/SectionBodySplitStyle">
+
+						<org.florescu.android.rangeseekbar.RangeSeekBar
+							android:layout_width="match_parent"
+							android:layout_height="match_parent"
+							android:layout_marginLeft="@dimen/gap_margin"
+							android:id="@+id/slider_speedBonus"
+							rsb:valuesAboveThumbs="true"
+							rsb:absoluteMaxValue="90"
+							rsb:absoluteMinValue="10"
+							rsb:activateOnDefaultValues="true"
+							rsb:showLabels="false"
+							rsb:thumbDisabled="@drawable/rectangle_slider"
+							rsb:thumbNormal="@drawable/rectangle_slider"
+							rsb:thumbPressed="@drawable/rectangle_slider"/>
 
 					</LinearLayout>
 

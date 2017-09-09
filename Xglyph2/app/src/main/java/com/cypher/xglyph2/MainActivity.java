@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import org.florescu.android.rangeseekbar.RangeSeekBar;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -43,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
 	public static final String GLYPHKEY = TAG + "_GlyphKey";
 	public static final String GLYPHSPEED = TAG + "_GlyphSpeed";
 	public static final String NORMALHACKKEY = TAG + "_NormalHackKey";
+	public static final String UGLYCHEATS = TAG + "_UglyCheats";
+	public static final String BYPASS = TAG + "_Bypass";
+	public static final String SPEEDBONUSMIN = TAG + "_SpeedBonusMin";
+	public static final String SPEEDBONUSMAX = TAG + "_SpeedBonusMax";
 	public static final String SOUND = TAG + "_Sound";
 	public static final String DEBUGLOG = TAG + "_DebugLog";
 	public static final String LOGFILE = TAG + "_Logfile";
@@ -53,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
 	public static final int GLYPHKEY_DEFAULT = KEY.OFF.ordinal();
 	public static final int GLYPHSPEED_DEFAULT = SPEED.OFF.ordinal();
 	public static final int NORMALHACKKEY_DEFAULT = KEY.OFF.ordinal();
+	public static final int UGLYCHEATS_DEFAULT = ON_OFF.OFF.ordinal();
+	public static final int BYPASS_DEFAULT = ON_OFF.OFF.ordinal();
+	public static final int SPEEDBONUSMIN_DEFAULT = 10;
+	public static final int SPEEDBONUSMAX_DEFAULT = 90;
 	public static final int SOUND_DEFAULT = ON_OFF.ON.ordinal();
 	public static final int DEBUGLOG_DEFAULT = ON_OFF.OFF.ordinal();
 	public static final int LOGFILE_DEFAULT = ON_OFF.OFF.ordinal();
@@ -66,31 +75,40 @@ public class MainActivity extends AppCompatActivity {
 	private KEY glyphKey;
 	private SPEED glyphSpeed;
 	private KEY normalHack;
+	private ON_OFF uglyCheats;
+	private ON_OFF bypass;
 	private ON_OFF sound;
 	private ON_OFF debugLog;
 	private ON_OFF logfile;
 
 	private boolean showToast;
+	private int uglyCheatsCounter;
 
 	private SharedPreferences pref;
 	private Resources res;
+	private Toast uglyCheatsToast;
 
 	private LinearLayout description_module;
 	private LinearLayout description_glyphGame;
 	private LinearLayout description_commandChannel;
 	private LinearLayout description_normalHack;
+	private LinearLayout description_uglyCheats;
 	private LinearLayout description_misc;
 	private LinearLayout description_credits;
 	private LinearLayout description_donation;
+	private LinearLayout ll_uglyCheats;
 	private Button button_activate;
 	private Button button_correctGlyphs;
 	private Button button_glyphKey;
 	private Button button_glyphSpeed;
 	private Button button_normalHack;
+	private Button button_bypass;
 	private Button button_sound;
 	private Button button_debugLog;
 	private Button button_logfile;
 	private Button button_donate;
+	private RangeSeekBar slider_speedBonus;
+	private TextView tv_credits;
 	private MediaPlayer mp_startSound;
 	private MediaPlayer mp_buttonSound;
 	private MediaPlayer mp_exitSound;
@@ -100,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
 	private String[] glyphKeyText;
 	private String[] glyphSpeedText;
 	private String[] normalHackText;
+	private String[] bypassText;
 	private String[] soundText;
 	private String[] debugLogText;
 	private String[] logfileText;
@@ -111,13 +130,14 @@ public class MainActivity extends AppCompatActivity {
 
 		showToast = false;
 
-		pref = getSharedPreferences(PREF, MODE_PRIVATE);
+		pref = getSharedPreferences(PREF, Context.MODE_PRIVATE);
 		res = getResources();
 
 		description_module = (LinearLayout) findViewById(R.id.description_module);
 		description_glyphGame = (LinearLayout) findViewById(R.id.description_glyphGame);
 		description_commandChannel = (LinearLayout) findViewById(R.id.description_commandChannel);
 		description_normalHack = (LinearLayout) findViewById(R.id.description_normalHack);
+		description_uglyCheats = (LinearLayout) findViewById(R.id.description_unglyCheats);
 		description_misc = (LinearLayout) findViewById(R.id.description_misc);
 		description_credits = (LinearLayout) findViewById(R.id.description_credits);
 		description_donation = (LinearLayout) findViewById(R.id.description_donation);
@@ -126,67 +146,42 @@ public class MainActivity extends AppCompatActivity {
 		button_glyphKey = (Button) findViewById(R.id.button_glyphKey);
 		button_glyphSpeed = (Button) findViewById(R.id.button_glyphSpeed);
 		button_normalHack = (Button) findViewById(R.id.button_normalHack);
+		button_bypass = (Button) findViewById(R.id.button_bypass);
 		button_sound = (Button) findViewById(R.id.button_sound);
 		button_debugLog = (Button) findViewById(R.id.button_debugLog);
 		button_logfile = (Button) findViewById(R.id.button_logfile);
 		button_donate = (Button) findViewById(R.id.button_donate);
 
+		slider_speedBonus = (RangeSeekBar) findViewById(R.id.slider_speedBonus);
+
 		mp_startSound = MediaPlayer.create(this, R.raw.sfx_glyphgame_score_positive);
 		mp_buttonSound = MediaPlayer.create(this, R.raw.sfx_ui_success);
 		mp_exitSound =  MediaPlayer.create(this, R.raw.sfx_ui_back);
 
-		activateText = new String[] {
-				res.getString(R.string.activate_off),
-				res.getString(R.string.activate_on)
-		};
-
-		correctGlyphsText = new String[] {
-				res.getString(R.string.correct_glyphs_off),
-				res.getString(R.string.correct_glyphs_on)
-		};
-
-		glyphKeyText = new String[] {
-				res.getString(R.string.glyph_key_off),
-				res.getString(R.string.glyph_key_key),
-				res.getString(R.string.glyph_key_no_key)
-		};
-
-		glyphSpeedText = new String[] {
-				res.getString(R.string.glyph_speed_off),
-				res.getString(R.string.glyph_speed_fast),
-				res.getString(R.string.glyph_speed_slow)
-		};
-
-		normalHackText = new String[] {
-				res.getString(R.string.normal_hack_off),
-				res.getString(R.string.normal_hack_key),
-				res.getString(R.string.normal_hack_no_key)
-		};
-
-		soundText = new String[] {
-				res.getString(R.string.sound_off),
-				res.getString(R.string.sound_on)
-		};
-
-		debugLogText = new String[] {
-				res.getString(R.string.debug_log_off),
-				res.getString(R.string.debug_log_on)
-		};
-
-		logfileText = new String[] {
-				res.getString(R.string.logfile_off),
-				res.getString(R.string.logfile_on)
-		};
-
-		setListeners();
+		initializeTexts();
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 		String buildDate = dateFormat.format(new java.util.Date(BuildConfig.TIMESTAMP));
 
 		String text = res.getString(R.string.app_name) + " " + String.format(res.getString(R.string.credits_version), BuildConfig.VERSION_NAME, buildDate);
 
-		TextView tv_credits = (TextView) findViewById(R.id.tv_credits);
+		tv_credits = (TextView) findViewById(R.id.tv_credits);
 		tv_credits.setText(text);
+
+		setListeners();
+
+		uglyCheats = ON_OFF.values()[pref.getInt(UGLYCHEATS, UGLYCHEATS_DEFAULT)];
+		ll_uglyCheats = (LinearLayout) findViewById(R.id.ll_uglyCheats);
+		uglyCheatsToast = Toast.makeText(getApplicationContext(), "Ugly cheats are already on\nShame on you...", Toast.LENGTH_SHORT);
+
+		if (uglyCheats == ON_OFF.ON) {
+			ll_uglyCheats.setVisibility(View.VISIBLE);
+			uglyCheatsCounter = 7;
+		} else {
+			ll_uglyCheats.setVisibility(View.GONE);
+			uglyCheatsCounter = 0;
+			bypass = ON_OFF.OFF;
+		}
 
 		// first, check if self hooking works
 		if (!isXposedEnabled()) {
@@ -243,6 +238,9 @@ public class MainActivity extends AppCompatActivity {
 		int prefGlyphKey = pref.getInt(GLYPHKEY, GLYPHKEY_DEFAULT);
 		int prefGlyphSpeed = pref.getInt(GLYPHSPEED, GLYPHSPEED_DEFAULT);
 		int prefNormalHack = pref.getInt(NORMALHACKKEY, NORMALHACKKEY_DEFAULT);
+		int prefBypass = pref.getInt(BYPASS, BYPASS_DEFAULT);
+		int prefSpeedBonusMin = pref.getInt(SPEEDBONUSMIN, SPEEDBONUSMIN_DEFAULT);
+		int prefSpeedBonusMax = pref.getInt(SPEEDBONUSMAX, SPEEDBONUSMAX_DEFAULT);
 		int prefSound = pref.getInt(SOUND, SOUND_DEFAULT);
 		int prefDebugLog = pref.getInt(DEBUGLOG, DEBUGLOG_DEFAULT);
 		int prefLogfile = pref.getInt(LOGFILE, LOGFILE_DEFAULT);
@@ -263,6 +261,14 @@ public class MainActivity extends AppCompatActivity {
 
 		normalHack = KEY.values()[prefNormalHack];
 		button_normalHack.setText(normalHackText[prefNormalHack]);
+
+		if (uglyCheats == ON_OFF.ON) {
+			bypass = ON_OFF.values()[prefBypass];
+			button_bypass.setText(bypassText[prefBypass]);
+
+			slider_speedBonus.setSelectedMinValue(prefSpeedBonusMin);
+			slider_speedBonus.setSelectedMaxValue(prefSpeedBonusMax);
+		}
 
 		sound = ON_OFF.values()[prefSound];
 		button_sound.setText(soundText[prefSound]);
@@ -291,6 +297,9 @@ public class MainActivity extends AppCompatActivity {
 		pref.edit().putInt(GLYPHKEY, glyphKey.ordinal()).apply();
 		pref.edit().putInt(GLYPHSPEED, glyphSpeed.ordinal()).apply();
 		pref.edit().putInt(NORMALHACKKEY, normalHack.ordinal()).apply();
+		pref.edit().putInt(BYPASS, bypass.ordinal()).apply();
+		pref.edit().putInt(SPEEDBONUSMIN, slider_speedBonus.getSelectedMinValue().intValue()).apply();
+		pref.edit().putInt(SPEEDBONUSMAX, slider_speedBonus.getSelectedMaxValue().intValue()).apply();
 		pref.edit().putInt(SOUND, sound.ordinal()).apply();
 		pref.edit().putInt(DEBUGLOG, debugLog.ordinal()).apply();
 		pref.edit().putInt(LOGFILE, logfile.ordinal()).apply();
@@ -305,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
 	private void fixPermissions() {
 		File sharedPrefsFolder = new File(this.getApplicationInfo().dataDir + "/shared_prefs");
 
-		Log.d(TAG, "sharedPrefsFolder: " + sharedPrefsFolder.toString());
+		//Log.d(TAG, "sharedPrefsFolder: " + sharedPrefsFolder.toString());
 
 		boolean folderPermissionsDone = false;
 		boolean filePermissionsDone = false;
@@ -340,6 +349,56 @@ public class MainActivity extends AppCompatActivity {
 		if (filePermissionsDone && !fileReadable) {
 			Log.e(TAG, "file set readable FAILED");
 		}
+	}
+
+	private void initializeTexts() {
+		activateText = new String[] {
+				res.getString(R.string.activate_off),
+				res.getString(R.string.activate_on)
+		};
+
+		correctGlyphsText = new String[] {
+				res.getString(R.string.correct_glyphs_off),
+				res.getString(R.string.correct_glyphs_on)
+		};
+
+		glyphKeyText = new String[] {
+				res.getString(R.string.glyph_key_off),
+				res.getString(R.string.glyph_key_key),
+				res.getString(R.string.glyph_key_no_key)
+		};
+
+		glyphSpeedText = new String[] {
+				res.getString(R.string.glyph_speed_off),
+				res.getString(R.string.glyph_speed_fast),
+				res.getString(R.string.glyph_speed_slow)
+		};
+
+		normalHackText = new String[] {
+				res.getString(R.string.normal_hack_off),
+				res.getString(R.string.normal_hack_key),
+				res.getString(R.string.normal_hack_no_key)
+		};
+
+		bypassText = new String[] {
+				res.getString(R.string.bypass_off),
+				res.getString(R.string.bypass_on)
+		};
+
+		soundText = new String[] {
+				res.getString(R.string.sound_off),
+				res.getString(R.string.sound_on)
+		};
+
+		debugLogText = new String[] {
+				res.getString(R.string.debug_log_off),
+				res.getString(R.string.debug_log_on)
+		};
+
+		logfileText = new String[] {
+				res.getString(R.string.logfile_off),
+				res.getString(R.string.logfile_on)
+		};
 	}
 
 	private void setListeners() {
@@ -394,6 +453,16 @@ public class MainActivity extends AppCompatActivity {
 			public void onClick(View view) {
 				normalHack = KEY.values()[(normalHack.ordinal() + 1) % KEY.values().length];
 				button_normalHack.setText(normalHackText[normalHack.ordinal()]);
+
+				buttonSound();
+			}
+		});
+
+		button_bypass.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				bypass = ON_OFF.values()[(bypass.ordinal() + 1) % ON_OFF.values().length];
+				button_bypass.setText(bypassText[bypass.ordinal()]);
 
 				buttonSound();
 			}
@@ -501,6 +570,18 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
+		description_uglyCheats.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				showDialog(
+						res.getString(R.string.description_ugly_cheats_bypass_header),
+						res.getString(R.string.description_ugly_cheats_bypass),
+						res.getString(R.string.description_ugly_cheats_speed_bonus_header),
+						res.getString(R.string.description_ugly_cheats_speed_bonus)
+				);
+			}
+		});
+
 		description_misc.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -530,6 +611,30 @@ public class MainActivity extends AppCompatActivity {
 						res.getString(R.string.description_donation_header),
 						res.getString(R.string.description_donation)
 				);
+			}
+		});
+
+		tv_credits.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (uglyCheats == ON_OFF.OFF) {
+					uglyCheatsCounter++;
+
+					if (uglyCheatsCounter >= 7) {
+						uglyCheatsToast.cancel();
+						uglyCheatsToast = Toast.makeText(getApplicationContext(), "Ugly cheats are on\nShame on you...", Toast.LENGTH_LONG);
+						uglyCheatsToast.show();
+
+						ll_uglyCheats.setVisibility(View.VISIBLE);
+						pref.edit().putInt(UGLYCHEATS, ON_OFF.ON.ordinal()).apply();
+					} else {
+						uglyCheatsToast.cancel();
+						uglyCheatsToast = Toast.makeText(getApplicationContext(), "Ugly cheats " + (7 - uglyCheatsCounter), Toast.LENGTH_SHORT);
+						uglyCheatsToast.show();
+					}
+				} else {
+					uglyCheatsToast.show();
+				}
 			}
 		});
 	}
@@ -589,40 +694,6 @@ public class MainActivity extends AppCompatActivity {
 			tv_description.setText(texts[i]);
 
 			ll_description.addView(ll_entry);
-		}
-
-		description.show();
-	}
-
-	private void showDescriptionSimple(String... texts) {
-		final Dialog description = new Dialog(MainActivity.this);
-
-		description.setContentView(R.layout.dialog_simple);
-		LinearLayout ll_description = (LinearLayout) description.findViewById(R.id.ll_description);
-
-		Button button_close = (Button) description.findViewById(R.id.button_close);
-		button_close.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				description.cancel();
-			}
-		});
-
-		for (int i = 0; i < texts.length; i++) {
-			TextView textView = new TextView(description.getContext());
-
-			if (i % 2 == 0) {
-				textView.setTypeface(null, android.graphics.Typeface.BOLD);
-
-				if (i > 0) {
-					textView.setPadding(24, 24, 0, 0);
-				} else {
-					textView.setPadding(24, 0, 0, 0);
-				}
-			}
-
-			textView.setText(texts[i]);
-			ll_description.addView(textView);
 		}
 
 		description.show();

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:shape="rectangle">
+
+	<size
+		android:width="@dimen/rectangle_slider_size"
+		android:height="@dimen/rectangle_slider_size"/>
+
+	<solid
+		android:color="@color/rectangle_cyan_fill" />
+
+	<stroke
+		android:color="@color/rectangle_cyan"
+		android:width="@dimen/rectangle_width" />
+</shape>
