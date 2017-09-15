@@ -312,42 +312,64 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void fixPermissions() {
-		File sharedPrefsFolder = new File(this.getApplicationInfo().dataDir + "/shared_prefs");
+		boolean dataFolderExists = false;
+		boolean prefFolderExists = false;
+		boolean prefFileExists = false;
 
-		//Log.d(TAG, "sharedPrefsFolder: " + sharedPrefsFolder.toString());
+		boolean dataFolderReadable = false;
+		boolean dataFolderExecutable = false;
+		boolean prefFolderReadable = false;
+		boolean prefFolderExecutable = false;
+		boolean prefFileReadable = false;
 
-		boolean folderPermissionsDone = false;
-		boolean filePermissionsDone = false;
+		File dataFolder = new File(this.getApplicationInfo().dataDir);
 
-		boolean folderExecutable = false;
-		boolean folderReadable = false;
-		boolean fileReadable = false;
+		if (dataFolder.exists()) { // this should be true, as soon as the app has been started
+			dataFolderExists = true;
+			dataFolderReadable = dataFolder.setReadable(true, false);
+			dataFolderExecutable = dataFolder.setExecutable(true, false);
 
-		if (sharedPrefsFolder.exists()) {
-			folderExecutable = sharedPrefsFolder.setExecutable(true, false);
-			folderReadable = sharedPrefsFolder.setReadable(true, false);
+			File sharedPrefsFolder = new File(this.getApplicationInfo().dataDir + "/shared_prefs");
+			//Log.d(TAG, "sharedPrefsFolder: " + sharedPrefsFolder.toString());
 
-			File prefFile = new File(sharedPrefsFolder.getAbsolutePath() + "/" + PREF + ".xml");
+			if (sharedPrefsFolder.exists()) {
+				prefFolderExists = true;
+				prefFolderReadable = sharedPrefsFolder.setReadable(true, false);
+				prefFolderExecutable = sharedPrefsFolder.setExecutable(true, false);
 
-			folderPermissionsDone = true;
+				File prefFile = new File(sharedPrefsFolder.getAbsolutePath() + "/" + PREF + ".xml");
 
-			if (prefFile.exists()) {
-				fileReadable = prefFile.setReadable(true, false);
-
-				filePermissionsDone = true;
+				if (prefFile.exists()) {
+					prefFileExists = true;
+					prefFileReadable = prefFile.setReadable(true, false);
+				} else {
+					Log.e(TAG, "preferences file doesn't exist");
+				}
+			} else {
+				Log.e(TAG, "preferences folder doesn't exist");
 			}
+		} else {
+			Log.e(TAG, "data folder doesn't exist");
 		}
 
-		if (folderPermissionsDone && !folderExecutable) {
-			Log.e(TAG, "folder set executable FAILED");
+		if (dataFolderExists && !dataFolderReadable) {
+			Log.e(TAG, "data folder set readable FAILED");
 		}
 
-		if (folderPermissionsDone && !folderReadable) {
-			Log.e(TAG, "folder set readable FAILED");
+		if (dataFolderExists && !dataFolderExecutable) {
+			Log.e(TAG, "data folder set executable FAILED");
 		}
 
-		if (filePermissionsDone && !fileReadable) {
-			Log.e(TAG, "file set readable FAILED");
+		if (prefFolderExists && !prefFolderReadable) {
+			Log.e(TAG, "preferences folder set readable FAILED");
+		}
+
+		if (prefFolderExists && !prefFolderExecutable) {
+			Log.e(TAG, "preferences folder set executable FAILED");
+		}
+
+		if (prefFileExists && !prefFileReadable) {
+			Log.e(TAG, "preferences file set readable FAILED");
 		}
 	}
 
