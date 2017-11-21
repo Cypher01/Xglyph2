@@ -41,8 +41,8 @@ public class Xglyph implements IXposedHookLoadPackage {
 	public static final String turingClassName = "com.nianticproject.ingress.common.utility.Turing";
 	public static final String turingClassMethodName1 = "g";
 	public static final String turingClassMethodName2 = "l";
-	public static String speedClassName = "o.nc"; // FIXME: this class name is for Ingress v1.122.0 and maybe future versions
-	public static String speedClassMethodName = "ˊ"; // FIXME: this method name is for Ingress v1.99.1 - v1.122.0 and maybe future versions
+	public static String speedClassName = "o.ne"; // FIXME: this class name is for Ingress v1.127.0 and maybe future versions
+	public static String speedClassMethodName = "ˊ"; // FIXME: this method name is for Ingress v1.99.1 - v1.127.0 and maybe future versions
 
 	public static final String apmClassName = "android.app.ApplicationPackageManager";
 	public static final String apmClassMethodName1 = "getInstalledApplications";
@@ -57,7 +57,7 @@ public class Xglyph implements IXposedHookLoadPackage {
 		// ================================================================================
 		if (lpparam.packageName.equals(BuildConfig.APPLICATION_ID)) {
 			try {
-				findAndHookMethod("com.cypher.xglyph2.MainActivity", lpparam.classLoader, "isXposedEnabled", new XC_MethodHook() {
+				findAndHookMethod(BuildConfig.APPLICATION_ID + ".MainActivity", lpparam.classLoader, "isXposedEnabled", new XC_MethodHook() {
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 						param.setResult(true);
@@ -84,7 +84,7 @@ public class Xglyph implements IXposedHookLoadPackage {
 		log(TAG, "Ingress loaded");
 
 		if (pref.getInt(ACTIVATE, ACTIVATE_DEFAULT) == ON_OFF.ON.ordinal()) {
-			int ingressVersion = pref.getInt(INGRESSVERSIONCODE, INGRESSVERSION20170821);
+			int ingressVersion = pref.getInt(INGRESSVERSIONCODE, INGRESSVERSION20171122);
 
 			if (ingressVersion < INGRESSVERSION20160802) {
 				speedClassName = "o.mq"; // FIXME: this class name is for Ingress v1.99.1 - v1.104.1
@@ -92,6 +92,8 @@ public class Xglyph implements IXposedHookLoadPackage {
 				speedClassName = "o.ms"; // FIXME: this class name is for Ingress v1.105.1 - v1.107.0
 			} else if (ingressVersion < INGRESSVERSION20170821) {
 				speedClassName = "o.nb"; // FIXME: this class name is for Ingress v1.107.0 - v1.121.0
+			} else if (ingressVersion < INGRESSVERSION20171122) {
+				speedClassName = "o.nc"; // FIXME: this class name is for Ingress v1.122.0 - v1.126.0
 			}
 
 			final Class<?> portalHackingParamsClass;

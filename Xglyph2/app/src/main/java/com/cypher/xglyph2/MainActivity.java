@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 	public static final int INGRESSVERSION20160802 = 11051;
 	public static final int INGRESSVERSION20161102 = 11081;
 	public static final int INGRESSVERSION20170821 = 11220;
+	public static final int INGRESSVERSION20171122 = 11270;
 
 	public static final String PREF = TAG + "_Pref";
 	public static final String ACTIVATE = TAG + "_Activate";
@@ -203,14 +204,6 @@ public class MainActivity extends AppCompatActivity {
 						res.getString(R.string.warning_xposed)
 				);
 			}
-		}
-
-		// check Android version
-		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-			showDialog(
-					res.getString(R.string.warning_android_version_header),
-					res.getString(R.string.warning_android_version)
-			);
 		}
 
 		// check Ingress version
