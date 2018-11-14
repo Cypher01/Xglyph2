@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 	public static final String TAG = "Xglyph2";
 
 	public static final String XPOSEDINSTALLERPACKAGENAME = "de.robv.android.xposed.installer";
-	public static final String INGRESSPACKAGENAME = "com.nianticproject.ingress";
+	public static final String INGRESSPACKAGENAME = "com.nianticlabs.ingress.prime.qa";
 	public static final int INGRESSVERSION20160802 = 11051;
 	public static final int INGRESSVERSION20161102 = 11081;
 	public static final int INGRESSVERSION20170821 = 11220;
