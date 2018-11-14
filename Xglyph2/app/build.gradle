@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
 	compileSdkVersion 27
-	buildToolsVersion "27.0.2"
 
 	defaultConfig {
 		applicationId "com.cypher.xglyph2"
@@ -10,6 +9,8 @@ android {
 		targetSdkVersion 27
 		versionCode 13
 		versionName "1.7"
+
+		setProperty("archivesBaseName", applicationId + "_v" + versionName)
 
 		buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 	}
@@ -19,11 +20,17 @@ android {
 			minifyEnabled false
 		}
 	}
+
+	compileOptions {
+		sourceCompatibility 1.8
+		targetCompatibility 1.8
+	}
 }
 
 dependencies {
-	compile 'com.android.support:appcompat-v7:27.+'
-	compile 'com.github.amlcurran.showcaseview:library:5.4.3'
-	compile 'org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0'
-	provided 'de.robv.android.xposed:api:82'
+	implementation 'com.android.support:appcompat-v7:27.+'
+	implementation 'com.android.support:support-v4:27.+'
+	implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
+	implementation 'org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0'
+	compileOnly 'de.robv.android.xposed:api:82'
 }
