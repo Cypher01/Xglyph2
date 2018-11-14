@@ -7,8 +7,8 @@ android {
 		applicationId "com.cypher.xglyph2"
 		minSdkVersion 14
 		targetSdkVersion 27
-		versionCode 13
-		versionName "1.7"
+		versionCode 14
+		versionName "1.8"
 
 		setProperty("archivesBaseName", applicationId + "_v" + versionName)
 

@@ -71,7 +71,7 @@ public class Xglyph implements IXposedHookLoadPackage {
 		// ================================================================================
 		// ==== Ingress ===================================================================
 		// ================================================================================
-		if (!lpparam.packageName.equals(INGRESSPACKAGENAME)) {
+		if (!lpparam.packageName.equals(INGRESSPACKAGENAME) && !lpparam.packageName.equals(SCANNERREDACTEDPACKAGENAME)) {
 			return;
 		}
 
@@ -84,18 +84,6 @@ public class Xglyph implements IXposedHookLoadPackage {
 		log(TAG, "Ingress loaded");
 
 		if (pref.getInt(ACTIVATE, ACTIVATE_DEFAULT) == ON_OFF.ON.ordinal()) {
-			int ingressVersion = pref.getInt(INGRESSVERSIONCODE, INGRESSVERSION20171122);
-
-			if (ingressVersion < INGRESSVERSION20160802) {
-				speedClassName = "o.mq"; // FIXME: this class name is for Ingress v1.99.1 - v1.104.1
-			} else if (ingressVersion < INGRESSVERSION20161102) {
-				speedClassName = "o.ms"; // FIXME: this class name is for Ingress v1.105.1 - v1.107.0
-			} else if (ingressVersion < INGRESSVERSION20170821) {
-				speedClassName = "o.nb"; // FIXME: this class name is for Ingress v1.107.0 - v1.121.0
-			} else if (ingressVersion < INGRESSVERSION20171122) {
-				speedClassName = "o.nc"; // FIXME: this class name is for Ingress v1.122.0 - v1.126.0
-			}
-
 			final Class<?> portalHackingParamsClass;
 			final Class<?> userInputGlyphSequenceClass;
 			final Class<?> glyphClass;

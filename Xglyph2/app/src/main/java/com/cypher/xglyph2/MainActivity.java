@@ -9,7 +9,6 @@ import android.content.pm.PackageInfo;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -34,10 +33,11 @@ public class MainActivity extends AppCompatActivity {
 
 	public static final String XPOSEDINSTALLERPACKAGENAME = "de.robv.android.xposed.installer";
 	public static final String INGRESSPACKAGENAME = "com.nianticproject.ingress";
-	public static final int INGRESSVERSION20160802 = 11051;
-	public static final int INGRESSVERSION20161102 = 11081;
-	public static final int INGRESSVERSION20170821 = 11220;
-	public static final int INGRESSVERSION20171122 = 11270;
+	public static final String SCANNERREDACTEDPACKAGENAME = "com.nianticlabs.ingress.prime.qa";
+	public static final int INGRESSVERSION20180620 = 11312;
+	public static final int INGRESSVERSION20181105 = 2011002;
+	public static final int INGRESSVERSION20181114 = 2012000;
+	public static final int SCANNERREDACTEDVERSION20181108 = 3013405;
 
 	public static final String PREF = TAG + "_Pref";
 	public static final String ACTIVATE = TAG + "_Activate";
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 	public static final String DEBUGLOG = TAG + "_DebugLog";
 	public static final String LOGFILE = TAG + "_Logfile";
 	public static final String INGRESSVERSIONCODE = TAG + "_IngressVersionCode";
+	public static final String SCANNERREDACTEDVERSIONCODE = TAG + "_ScannerRedactedVersionCode";
 
 	public static final int ACTIVATE_DEFAULT = ON_OFF.ON.ordinal();
 	public static final int CORRECTGLYPHS_DEFAULT = ON_OFF.ON.ordinal();
@@ -206,15 +207,30 @@ public class MainActivity extends AppCompatActivity {
 			}
 		}
 
-		// check Ingress version
+		// check Scanner Redacted version
 		try {
-			PackageInfo ingress = findPackage(INGRESSPACKAGENAME);
-			pref.edit().putInt(INGRESSVERSIONCODE, ingress.versionCode).apply();
+			pref.edit().remove(SCANNERREDACTEDVERSIONCODE).apply();
+			PackageInfo scannerRedacted = findPackage(SCANNERREDACTEDPACKAGENAME);
+			pref.edit().putInt(SCANNERREDACTEDVERSIONCODE, scannerRedacted.versionCode).apply();
 		} catch (AppNotInstalledException e) {
-			showDialog(
-					res.getString(R.string.warning_ingress_version_header),
-					res.getString(R.string.warning_ingress_version)
-			);
+			// check Ingress version
+			try {
+				pref.edit().remove(INGRESSVERSIONCODE).apply();
+				PackageInfo ingress = findPackage(INGRESSPACKAGENAME);
+				pref.edit().putInt(INGRESSVERSIONCODE, ingress.versionCode).apply();
+
+				if (ingress.versionCode >= INGRESSVERSION20181105) {
+					showDialog(
+							res.getString(R.string.warning_ingress_prime_header),
+							res.getString(R.string.warning_ingress_prime)
+					);
+				}
+			} catch (AppNotInstalledException e2) {
+				showDialog(
+						res.getString(R.string.warning_ingress_version_header),
+						res.getString(R.string.warning_ingress_version)
+				);
+			}
 		}
 
 		descriptionHint();
