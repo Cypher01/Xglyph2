@@ -75,6 +75,8 @@ public class Xglyph implements IXposedHookLoadPackage {
 			return;
 		}
 
+		GlyphTranslator.sequence.clear();
+
 		if (logfile.equals("")) {
 			logfile = "Xglyph2_" + getDateAndTime(true) + ".txt";
 		}
