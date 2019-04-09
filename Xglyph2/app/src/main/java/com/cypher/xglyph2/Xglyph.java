@@ -6,6 +6,7 @@ import com.cypher.xglyph2.hooks.*;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
+import de.robv.android.xposed.XposedBridge;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import static com.cypher.xglyph2.MainActivity.*;
+import static de.robv.android.xposed.XposedBridge.*;
 import static de.robv.android.xposed.XposedHelpers.*;
 import static de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
@@ -43,6 +45,9 @@ public class Xglyph implements IXposedHookLoadPackage {
 	public static final String turingClassMethodName2 = "l";
 	public static String speedClassName = "o.ne"; // FIXME: this class name is for Ingress v1.127.0 and maybe future versions
 	public static String speedClassMethodName = "ˊ"; // FIXME: this method name is for Ingress v1.99.1 - v1.127.0 and maybe future versions
+
+	public static String nemesisClassName = "com.nianticproject.ingress.NemesisApplication";
+    public static String nemesisMethodName = "onCreate";
 
 	public static final String apmClassName = "android.app.ApplicationPackageManager";
 	public static final String apmClassMethodName1 = "getInstalledApplications";
@@ -89,8 +94,9 @@ public class Xglyph implements IXposedHookLoadPackage {
 			final Class<?> portalHackingParamsClass;
 			final Class<?> userInputGlyphSequenceClass;
 			final Class<?> glyphClass;
-			final Class<?> turingClass;
+			//final Class<?> turingClass;
 			final Class<?> speedClass;
+			final Class<?> nemesisClass;
 
 			try {
 				portalHackingParamsClass = findClass(portalHackingParamsClassName, lpparam.classLoader);
@@ -113,10 +119,17 @@ public class Xglyph implements IXposedHookLoadPackage {
 				return;
 			}
 
-			try {
+			/* try {
 				turingClass = findClass(turingClassName, lpparam.classLoader);
 			} catch (ClassNotFoundError e) {
 				log(TAG, turingClassName + ": class not found", true);
+				return;
+			} */
+
+			try {
+				nemesisClass = findClass(nemesisClassName, lpparam.classLoader);
+			} catch (ClassNotFoundError e) {
+				log(TAG, nemesisClassName + ": class not found", true);
 				return;
 			}
 
@@ -139,7 +152,7 @@ public class Xglyph implements IXposedHookLoadPackage {
 				log(TAG, portalHackingParamsClassName + ": constructor for glyph hack not found", true);
 			}
 
-			try {
+			/* try {
 				findAndHookMethod(turingClass, turingClassMethodName1, String.class, new TranslateGlyphsHook());
 			} catch (NoSuchMethodError error) {
 				log(TAG, turingClassName + "." + turingClassMethodName1 + ": method not found", true);
@@ -149,7 +162,14 @@ public class Xglyph implements IXposedHookLoadPackage {
 				findAndHookMethod(turingClass, turingClassMethodName2, new ClearGlyphsHook());
 			} catch (NoSuchMethodError error) {
 				log(TAG, turingClassName + "." + turingClassMethodName2 + ": method not found", true);
-			}
+			} */
+
+            try {
+                findAndHookMethod(nemesisClass, nemesisMethodName, new NemesisHook(lpparam));
+            } catch (NoSuchMethodError error) {
+                log(TAG, nemesisClassName + "." + nemesisMethodName + ": method not found", true);
+            }
+
 
 			try {
 				findAndHookMethod(speedClass, speedClassMethodName, String.class, new GlyphSpeedHook());
