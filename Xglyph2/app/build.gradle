@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 27
+	compileSdkVersion 28
 
 	defaultConfig {
 		applicationId "com.cypher.xglyph2"
 		minSdkVersion 14
-		targetSdkVersion 27
-		versionCode 15
+		targetSdkVersion 28
+		versionCode 16
 		versionName "1.8.2"
 
 		setProperty("archivesBaseName", applicationId + "_v" + versionName)
@@ -28,8 +28,8 @@ android {
 }
 
 dependencies {
-	implementation 'com.android.support:appcompat-v7:27.+'
-	implementation 'com.android.support:support-v4:27.+'
+	implementation 'com.android.support:appcompat-v7:28.+'
+	implementation 'com.android.support:support-v4:28.+'
 	implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
 	implementation 'org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0'
 	compileOnly 'de.robv.android.xposed:api:82'
